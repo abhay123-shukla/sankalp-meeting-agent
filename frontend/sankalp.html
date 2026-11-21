@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="nightfall">
+<html lang="en" data-theme="daylight">
 
 <head>
   <meta charset="utf-8">
@@ -11,6 +11,21 @@
     rel="stylesheet">
   <style>
     :root,
+    [data-theme=daylight] {
+      --bg: #f8fafc;
+      --bg2: #e8edf8;
+      --ink: #090d1a;
+      --mute: #475569;
+      --a: #4f46e5;
+      --b: #d97706;
+      --c: #0284c7;
+      --ok: #16a34a;
+      --glass: rgba(255, 255, 255, .82);
+      --line: rgba(15, 23, 42, .11);
+      --sh: rgba(15, 23, 42, .16);
+      --btnink: #ffffff;
+    }
+
     [data-theme=nightfall] {
       --bg: #070a16;
       --bg2: #131a3b;
@@ -23,7 +38,7 @@
       --glass: rgba(60, 70, 150, .30);
       --line: rgba(160, 175, 255, .16);
       --sh: #000;
-      --btnink: #070a18
+      --btnink: #070a18;
     }
 
     [data-theme=aurora] {
@@ -37,7 +52,8 @@
       --ok: #6ef2b0;
       --glass: rgba(30, 120, 120, .3);
       --line: rgba(130, 255, 220, .18);
-      --btnink: #03211c
+      --sh: #000;
+      --btnink: #03211c;
     }
 
     [data-theme=ember] {
@@ -51,7 +67,8 @@
       --ok: #9cf2a0;
       --glass: rgba(160, 60, 40, .3);
       --line: rgba(255, 170, 130, .2);
-      --btnink: #2a0d05
+      --sh: #000;
+      --btnink: #2a0d05;
     }
 
     * {
@@ -153,10 +170,10 @@
       justify-content: space-between;
       align-items: center;
       border-radius: 20px;
-      background: color-mix(in srgb, var(--bg) 60%, transparent);
+      background: color-mix(in srgb, var(--bg) 80%, transparent);
       border: 1px solid var(--line);
       backdrop-filter: blur(16px) saturate(1.4);
-      box-shadow: 0 16px 40px -20px #000
+      box-shadow: 0 16px 40px -20px var(--sh)
     }
 
     .navl {
@@ -185,7 +202,7 @@
       top: 0;
       bottom: 0;
       border-radius: 99px;
-      background: color-mix(in srgb, var(--ink) 10%, transparent);
+      background: color-mix(in srgb, var(--ink) 8%, transparent);
       box-shadow: inset 0 0 0 1px var(--line);
       transition: left .28s cubic-bezier(.2, .8, .2, 1), width .28s cubic-bezier(.2, .8, .2, 1), opacity .2s
     }
@@ -202,10 +219,10 @@
       width: min(400px, calc(100vw - 48px));
       padding: 18px;
       border-radius: 20px;
-      background: color-mix(in srgb, var(--bg2) 90%, transparent);
+      background: color-mix(in srgb, var(--bg) 95%, transparent);
       border: 1px solid var(--line);
       backdrop-filter: blur(18px);
-      box-shadow: 0 30px 60px -20px #000, inset 0 1px 0 rgba(255, 255, 255, .08);
+      box-shadow: 0 30px 60px -20px var(--sh), inset 0 1px 0 rgba(255, 255, 255, .3);
       transform-origin: top center;
       animation: pvin .3s cubic-bezier(.2, .9, .3, 1) both
     }
@@ -601,7 +618,8 @@
       backdrop-filter: blur(10px);
       transform-style: preserve-3d;
       transition: transform .2s ease-out, border-color .3s;
-      overflow: hidden
+      overflow: hidden;
+      box-shadow: 0 12px 30px -15px var(--sh)
     }
 
     .card::after {
@@ -657,7 +675,8 @@
       background: var(--glass);
       backdrop-filter: blur(12px);
       padding: 24px;
-      min-height: 450px
+      min-height: 450px;
+      box-shadow: 0 14px 34px -18px var(--sh)
     }
 
     .pane h4 {
@@ -829,7 +848,8 @@
       background: var(--glass);
       backdrop-filter: blur(12px);
       padding: 20px;
-      position: relative
+      position: relative;
+      box-shadow: 0 14px 34px -18px var(--sh)
     }
 
     .mem svg {
@@ -918,8 +938,9 @@
       height: 26px;
       border-radius: 50%;
       border: 2px solid transparent;
+      box-shadow: inset 0 0 0 1px var(--line);
       cursor: pointer;
-      transition: transform .2s
+      transition: transform .2s, border-color .2s, box-shadow .2s
     }
 
     .dock button:hover {
@@ -927,7 +948,8 @@
     }
 
     .dock button[aria-pressed=true] {
-      border-color: var(--ink)
+      border-color: var(--ink);
+      box-shadow: 0 0 0 2px color-mix(in srgb, var(--a) 40%, transparent)
     }
 
     footer {
@@ -1056,32 +1078,59 @@
         /* lights + shadow-only floor */
         const key = new THREE.DirectionalLight(0xffffff, 1.15); key.position.set(4, 9, 7); key.castShadow = true; key.shadow.mapSize.set(2048, 2048);
         Object.assign(key.shadow.camera, { left: -9, right: 9, top: 9, bottom: -9, near: 1, far: 30 }); key.shadow.bias = -.0004; key.shadow.normalBias = .03; S.add(key);
-        const rim = new THREE.PointLight(0xffffff, 1.1, 22); rim.position.set(-6, 3, -5); S.add(rim); S.add(new THREE.AmbientLight(0xffffff, .25));
+        const rim = new THREE.PointLight(0xffffff, 1.1, 22); rim.position.set(-6, 3, -5); S.add(rim);
+        const ambient = new THREE.AmbientLight(0xffffff, .25); S.add(ambient);
         const floor = new THREE.Mesh(new THREE.PlaneGeometry(40, 40).rotateX(-Math.PI / 2), new THREE.ShadowMaterial({ opacity: .42 })); floor.position.y = -3.1; floor.receiveShadow = true; S.add(floor);
         /* text textures */
         const wrap = (x, t, mw) => { const L = []; let l = ''; t.split(' ').forEach(wd => { const n = l ? l + ' ' + wd : wd; if (x.measureText(n).width > mw && l) { L.push(l); l = wd } else l = n }); L.push(l); return L };
-        const draw = c => {
+        const draw = (c, light) => {
           const cn = document.createElement('canvas'); cn.width = 1100; cn.height = 550; const x = cn.getContext('2d'), P = 72;
           x.fillStyle = raw('--mute'); x.font = '600 30px "Hanken Grotesk",sans-serif'; x.fillText(c.m, P, 100);
           x.fillStyle = raw('--ink'); x.font = '700 70px "Bricolage Grotesque","Trebuchet MS",sans-serif'; x.fillText(c.t, P, 195);
-          x.globalAlpha = .85; x.font = '400 33px "Hanken Grotesk",sans-serif'; wrap(x, c.b, 940).forEach((l, j) => x.fillText(l, P, 268 + j * 46)); x.globalAlpha = 1;
+          x.globalAlpha = light ? .95 : .85; x.font = '400 33px "Hanken Grotesk",sans-serif'; wrap(x, c.b, 940).forEach((l, j) => x.fillText(l, P, 268 + j * 46)); x.globalAlpha = 1;
           x.font = '600 28px "Hanken Grotesk",sans-serif'; const tw = x.measureText(c.g).width + 44, ty = 410;
-          x.fillStyle = raw(c.k); x.globalAlpha = .22; x.beginPath(); x.moveTo(P + 22, ty); x.arcTo(P + tw, ty, P + tw, ty + 50, 25); x.arcTo(P + tw, ty + 50, P, ty + 50, 25); x.arcTo(P, ty + 50, P, ty, 25); x.arcTo(P, ty, P + tw, ty, 25); x.fill();
+          x.fillStyle = raw(c.k); x.globalAlpha = light ? .14 : .22; x.beginPath(); x.moveTo(P + 22, ty); x.arcTo(P + tw, ty, P + tw, ty + 50, 25); x.arcTo(P + tw, ty + 50, P, ty + 50, 25); x.arcTo(P, ty + 50, P, ty, 25); x.arcTo(P, ty, P + tw, ty, 25); x.fill();
           x.globalAlpha = 1; x.fillText(c.g, P + 22, ty + 35);
           const t = new THREE.CanvasTexture(cn); t.encoding = THREE.sRGBEncoding; t.anisotropy = R.capabilities.getMaxAnisotropy(); return t
         };
         /* studio reflections (softboxes in theme colours) */
         const pm = new THREE.PMREMGenerator(R); let envT = null;
-        const env = () => {
-          const e = new THREE.Scene(); e.add(new THREE.Mesh(new THREE.BoxGeometry(30, 30, 30), new THREE.MeshBasicMaterial({ color: 0x090912, side: THREE.BackSide })));
+        const env = (light) => {
+          const e = new THREE.Scene();
+          const bgCol = light ? 0xf8fafd : 0x090912;
+          e.add(new THREE.Mesh(new THREE.BoxGeometry(30, 30, 30), new THREE.MeshBasicMaterial({ color: bgCol, side: THREE.BackSide })));
           const pn = (a, b, col, k, x, y, z) => { const m = new THREE.Mesh(new THREE.PlaneGeometry(a, b), new THREE.MeshBasicMaterial({ color: col.clone().multiplyScalar(k), side: THREE.DoubleSide })); m.position.set(x, y, z); m.lookAt(0, 0, 0); e.add(m) };
-          pn(14, 6, new THREE.Color(0xffffff), 5, 0, 12, 5); pn(3, 16, cv('--a'), 6, -13, 2, 3); pn(3, 16, cv('--c'), 5, 13, 2, -3); pn(10, 3, new THREE.Color(0xffffff), 2, 0, -1, 14);
+          if (light) {
+            pn(14, 6, new THREE.Color(0xffffff), 2.2, 0, 12, 5);
+            pn(4, 16, cv('--a'), 2.2, -13, 2, 3);
+            pn(4, 16, cv('--c'), 2.2, 13, 2, -3);
+            pn(10, 3, new THREE.Color(0xffffff), 1.8, 0, -1, 14);
+          } else {
+            pn(14, 6, new THREE.Color(0xffffff), 5, 0, 12, 5);
+            pn(3, 16, cv('--a'), 6, -13, 2, 3);
+            pn(3, 16, cv('--c'), 5, 13, 2, -3);
+            pn(10, 3, new THREE.Color(0xffffff), 2, 0, -1, 14);
+          }
           if (envT) envT.dispose(); envT = pm.fromScene(e, .03).texture; S.environment = envT
         };
         const paint = () => {
-          const bg = cv('--bg'), light = bg.getHSL({}).l > .5, bc = cv('--bg2'); if (light) bc.lerp(new THREE.Color(0xffffff), .55); else bc.multiplyScalar(.8);
-          body.color.copy(bc); rim.color.copy(cv('--a')); spill.color.copy(cv('--b')); strip.material.color.copy(cv('--b'));
-          tiles.forEach((g, i) => { const o = g.userData.tm.map; if (o) o.dispose(); g.userData.tm.map = draw(CARDS[i]); g.userData.tm.needsUpdate = true }); env()
+          const bg = cv('--bg'), light = bg.getHSL({}).l > .5;
+          const bc = light ? new THREE.Color(0xffffff) : cv('--bg2').multiplyScalar(.8);
+          body.color.copy(bc);
+          body.roughness = light ? .28 : .38;
+          body.metalness = light ? .06 : .15;
+          body.clearcoat = 1;
+          body.clearcoatRoughness = light ? .08 : .12;
+          body.envMapIntensity = light ? 0.95 : 1.1;
+          key.intensity = light ? 1.35 : 1.15;
+          ambient.intensity = light ? .62 : .25;
+          floor.material.opacity = light ? .18 : .42;
+          rim.color.copy(cv('--a'));
+          spill.color.copy(cv('--b'));
+          spill.intensity = light ? 0.7 : 0.9;
+          strip.material.color.copy(cv('--b'));
+          tiles.forEach((g, i) => { const o = g.userData.tm.map; if (o) o.dispose(); g.userData.tm.map = draw(CARDS[i], light); g.userData.tm.needsUpdate = true });
+          env(light);
         };
         paint(); try { Promise.all([document.fonts.load('700 70px "Bricolage Grotesque"'), document.fonts.load('400 33px "Hanken Grotesk"'), document.fonts.load('600 30px "Hanken Grotesk"')]).then(paint) } catch (e) { }
         const mo = new MutationObserver(() => setTimeout(paint, 30)); mo.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
@@ -1462,10 +1511,28 @@
     }
 
     const FLOW = [['Transcript and speakers', 'Reads the conversation and knows who said what.'], ['Extraction', 'Pulls out decisions, action items, owners and deadlines.'], ['Memory and conflicts', 'Compares with past meetings and flags clashes like Stripe vs Razorpay.'], ['Confirmation gate', 'Everything waits in review until a human approves.'], ['Tracker push', 'Approved action items become tracker tasks.'], ['Pre-deadline reminders', 'Owners get a nudge before the date, not after.'], ['Weekly digest', 'Each person gets duties, deadlines and updates.']];
-    const THEMES = [['nightfall', '#8b6cff'], ['aurora', '#2ee6a6'], ['ember', '#ff6a3d']];
+    const THEMES = [
+      ['daylight', 'linear-gradient(135deg, #ffffff 45%, #4f46e5 45%)', 'Daylight (Light)'],
+      ['nightfall', '#8b6cff', 'Nightfall (Dark)'],
+      ['aurora', '#2ee6a6', 'Aurora (Teal)'],
+      ['ember', '#ff6a3d', 'Ember (Warm)']
+    ];
 
     function App() {
-      const [th, setTh] = useState(() => { try { return (['nightfall', 'aurora', 'ember'].includes(localStorage.getItem('ep-theme')) ? localStorage.getItem('ep-theme') : 'nightfall') } catch (e) { return 'nightfall' } });
+      const [th, setTh] = useState(() => {
+        try {
+          const ver = localStorage.getItem('ep-theme-ver');
+          if (ver !== '2') {
+            localStorage.setItem('ep-theme-ver', '2');
+            localStorage.setItem('ep-theme', 'daylight');
+            return 'daylight';
+          }
+          const saved = localStorage.getItem('ep-theme');
+          return ['daylight', 'nightfall', 'aurora', 'ember'].includes(saved) ? saved : 'daylight';
+        } catch (e) {
+          return 'daylight';
+        }
+      });
       useEffect(() => { document.documentElement.dataset.theme = th; try { localStorage.setItem('ep-theme', th) } catch (e) { } }, [th]);
       const [refreshVer, setRefreshVer] = useState(0);
       return html`<div className="wrap">
@@ -1484,7 +1551,7 @@
     <${Memory} refreshVer=${refreshVer}/>
     <${Digest} refreshVer=${refreshVer}/>
     <footer><div className="logo"><${Logo}/>Sankalp</div><div>Review first. Push second. Remember always.</div></footer>
-    <div className="dock" role="group" aria-label="Theme">${THEMES.map(t => html`<button key=${t[0]} aria-label=${t[0] + ' theme'} aria-pressed=${th === t[0]} style=${{ background: t[1] }} onClick=${() => setTh(t[0])}></button>`)}</div>
+    <div className="dock" role="group" aria-label="Theme">${THEMES.map(t => html`<button key=${t[0]} aria-label=${(t[2] || t[0]) + ' theme'} title=${t[2] || t[0]} aria-pressed=${th === t[0]} style=${{ background: t[1] }} onClick=${() => setTh(t[0])}></button>`)}</div>
   </div>`;
     }
     ReactDOM.createRoot(document.getElementById('root')).render(html`<${App}/>`);
