@@ -27,7 +27,9 @@ def run_tests():
         assert res_banner.headers["content-type"] == "image/png"
         res_ui_banner = client.get("/ui/sankalp-banner.png")
         assert res_ui_banner.status_code == 200
-        print("✓ GET /sankalp-banner.png & /ui/sankalp-banner.png successfully serving frontend/sankalp-banner.png")
+        res_static_banner = client.get("/static/sankalp-banner.png")
+        assert res_static_banner.status_code == 200
+        print("✓ GET /sankalp-banner.png, /ui/sankalp-banner.png & /static/sankalp-banner.png successfully serving banner")
 
         # 2. Reset database for clean testing run
         res = client.post("/api/reset?preserve_settings=false")

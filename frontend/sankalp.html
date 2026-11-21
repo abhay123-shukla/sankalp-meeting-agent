@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="daylight">
+<html lang="en" data-theme="nightfall">
 
 <head>
   <meta charset="utf-8">
@@ -7,25 +7,10 @@
   <title>Sankalp – Meetings that remember</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link
-    href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&family=Hanken+Grotesk:wght@400;500;600;700&display=swap"
     rel="stylesheet">
   <style>
     :root,
-    [data-theme=daylight] {
-      --bg: #f5f7fb;
-      --bg2: #e8eefc;
-      --ink: #0f172a;
-      --mute: #475569;
-      --a: #4f46e5;
-      --b: #d97706;
-      --c: #0d9488;
-      --ok: #059669;
-      --glass: #ffffff;
-      --line: rgba(15, 23, 42, 0.14);
-      --sh: rgba(15, 23, 42, 0.10);
-      --btnink: #ffffff;
-    }
-
     [data-theme=nightfall] {
       --bg: #070a16;
       --bg2: #131a3b;
@@ -35,7 +20,7 @@
       --b: #ffb454;
       --c: #46e0d0;
       --ok: #6ef2b0;
-      --glass: rgba(19, 26, 59, 0.85);
+      --glass: rgba(60, 70, 150, .30);
       --line: rgba(160, 175, 255, .16);
       --sh: #000;
       --btnink: #070a18;
@@ -50,7 +35,7 @@
       --b: #7df3ff;
       --c: #b6ff6b;
       --ok: #6ef2b0;
-      --glass: rgba(15, 43, 51, 0.85);
+      --glass: rgba(30, 120, 120, .3);
       --line: rgba(130, 255, 220, .18);
       --sh: #000;
       --btnink: #03211c;
@@ -65,7 +50,7 @@
       --b: #ffc94d;
       --c: #ff9cc2;
       --ok: #9cf2a0;
-      --glass: rgba(58, 20, 16, 0.85);
+      --glass: rgba(160, 60, 40, .3);
       --line: rgba(255, 170, 130, .2);
       --sh: #000;
       --btnink: #2a0d05;
@@ -86,13 +71,13 @@
       color: var(--ink);
       font: 400 16px/1.6 'Hanken Grotesk', system-ui, sans-serif;
       overflow-x: hidden;
-      transition: background .4s, color .4s;
+      transition: background .5s, color .5s;
       padding-top: env(safe-area-inset-top, 0px);
       padding-bottom: env(safe-area-inset-bottom, 0px);
     }
 
     :focus-visible {
-      outline: 2px solid var(--a);
+      outline: 2px solid var(--c);
       outline-offset: 3px;
     }
 
@@ -100,14 +85,16 @@
       font-family: 'Bricolage Grotesque', 'Trebuchet MS', sans-serif;
     }
 
+    /* Atmosphere / Dark Background Layer */
     .bg {
       position: fixed;
       inset: 0;
       z-index: -1;
       overflow: hidden;
+      pointer-events: none;
       background:
         radial-gradient(1100px 650px at 85% -10%, var(--bg2), transparent 62%),
-        radial-gradient(800px 600px at -10% 55%, color-mix(in srgb, var(--a) 18%, transparent), transparent 60%);
+        radial-gradient(800px 600px at -10% 55%, color-mix(in srgb, var(--a) 28%, transparent), transparent 60%);
     }
 
     .floor {
@@ -124,7 +111,7 @@
       background-size: 56px 56px;
       -webkit-mask-image: linear-gradient(to top, #000 0%, transparent 55%);
       mask-image: linear-gradient(to top, #000 0%, transparent 55%);
-      animation: fl 7s linear infinite;
+      animation: fl 6s linear infinite;
       opacity: .6;
     }
 
@@ -140,7 +127,9 @@
       top: 34%;
       width: 100%;
       height: 160px;
-      opacity: .18;
+      opacity: .22;
+      z-index: -1;
+      pointer-events: none;
     }
 
     .bg path {
@@ -165,6 +154,7 @@
       width: 100%;
     }
 
+    /* Floating sticky glass pill navbar */
     .nav {
       position: sticky;
       top: calc(12px + env(safe-area-inset-top, 0px));
@@ -175,10 +165,10 @@
       justify-content: space-between;
       align-items: center;
       border-radius: 20px;
-      background: color-mix(in srgb, var(--bg) 85%, transparent);
+      background: color-mix(in srgb, var(--bg) 60%, transparent);
       border: 1px solid var(--line);
       backdrop-filter: blur(16px) saturate(1.4);
-      box-shadow: 0 16px 40px -20px var(--sh);
+      box-shadow: 0 16px 40px -20px #000;
     }
 
     .navl {
@@ -190,17 +180,15 @@
     .navl a {
       position: relative;
       z-index: 1;
-      padding: 9px 16px;
+      padding: 9px 15px;
       border-radius: 99px;
       color: var(--mute);
       text-decoration: none;
-      font-weight: 600;
-      font-size: 14px;
+      font-weight: 500;
       transition: color .2s;
     }
 
-    .navl a.on,
-    .navl a:hover {
+    .navl a.on {
       color: var(--ink);
     }
 
@@ -209,7 +197,7 @@
       top: 0;
       bottom: 0;
       border-radius: 99px;
-      background: color-mix(in srgb, var(--ink) 8%, transparent);
+      background: color-mix(in srgb, var(--ink) 10%, transparent);
       box-shadow: inset 0 0 0 1px var(--line);
       transition: left .28s cubic-bezier(.2, .8, .2, 1), width .28s cubic-bezier(.2, .8, .2, 1), opacity .2s;
     }
@@ -226,10 +214,10 @@
       width: min(400px, calc(100vw - 48px));
       padding: 18px;
       border-radius: 20px;
-      background: var(--glass);
+      background: color-mix(in srgb, var(--bg2) 90%, transparent);
       border: 1px solid var(--line);
       backdrop-filter: blur(18px);
-      box-shadow: 0 24px 50px -15px var(--sh), inset 0 1px 0 rgba(255, 255, 255, .6);
+      box-shadow: 0 30px 60px -20px #000, inset 0 1px 0 rgba(255, 255, 255, .08);
       transform-origin: top center;
       animation: pvin .3s cubic-bezier(.2, .9, .3, 1) both;
     }
@@ -244,7 +232,6 @@
     .pvp h5 {
       font: 700 18px 'Bricolage Grotesque', sans-serif;
       margin: 0 0 2px;
-      color: var(--ink);
     }
 
     .pvp p {
@@ -259,10 +246,9 @@
       align-items: center;
       padding: 9px 11px;
       border-radius: 11px;
-      background: color-mix(in srgb, var(--ink) 4%, transparent);
+      background: color-mix(in srgb, var(--ink) 5%, transparent);
       margin-bottom: 7px;
       font-size: 14px;
-      color: var(--ink);
     }
 
     .pvr i {
@@ -285,13 +271,11 @@
       font-weight: 600;
       border: 1px solid var(--line);
       color: var(--mute);
-      background: var(--glass);
     }
 
     .chips span.k {
       border-color: var(--b);
       color: var(--b);
-      background: color-mix(in srgb, var(--b) 10%, transparent);
     }
 
     .mini {
@@ -299,7 +283,7 @@
       border: 1px solid var(--line);
       padding: 12px;
       font-size: 13px;
-      background: var(--glass);
+      background: color-mix(in srgb, var(--bg) 60%, transparent);
     }
 
     .bar {
@@ -397,14 +381,13 @@
       display: flex;
       gap: 10px;
       align-items: center;
-      color: var(--ink);
     }
 
     .lg {
       width: 34px;
       height: 34px;
       flex: none;
-      filter: drop-shadow(0 4px 10px color-mix(in srgb, var(--a) 40%, transparent));
+      filter: drop-shadow(0 6px 14px color-mix(in srgb, var(--a) 55%, transparent));
       transition: transform .3s;
     }
 
@@ -423,13 +406,12 @@
       transform: rotate(-6deg) scale(1.06);
     }
 
-    /* headline that reacts to cursor */
+    /* Headline that reacts to cursor */
     .wave {
-      font: 800 clamp(40px, 5.6vw, 84px)/1.02 'Bricolage Grotesque', sans-serif;
+      font: 700 clamp(40px, 5.6vw, 84px)/1.02 'Bricolage Grotesque', sans-serif;
       letter-spacing: -.025em;
       margin: 0 0 22px;
       cursor: default;
-      color: var(--ink);
     }
 
     .wave span {
@@ -474,54 +456,67 @@
       padding: 15px 26px;
       cursor: pointer;
       transition: transform .25s, box-shadow .25s;
-      box-shadow: 0 10px 30px -10px color-mix(in srgb, var(--a) 60%, transparent);
+      box-shadow: 0 10px 30px -10px var(--a);
     }
 
     .btn:hover {
-      transform: translateY(-3px) scale(1.02);
-      box-shadow: 0 18px 40px -10px color-mix(in srgb, var(--a) 70%, transparent);
+      transform: translateY(-3px) scale(1.03);
+      box-shadow: 0 18px 40px -10px var(--a);
     }
 
     .btn.g {
-      background: var(--glass);
+      background: transparent;
       color: var(--ink);
       border: 1px solid var(--line);
-      box-shadow: 0 4px 12px -4px var(--sh);
+      box-shadow: none;
       margin-left: 10px;
     }
 
     .btn[disabled] {
-      opacity: .4;
+      opacity: .35;
       cursor: not-allowed;
       transform: none;
     }
 
-    .hero-banner-wrap {
-      margin-bottom: 22px;
-      display: inline-block;
-      max-width: 100%;
+    /* FULL-WIDTH BANNER directly below navbar, above hero */
+    .hero-banner-full {
+      width: 100vw;
+      position: relative;
+      left: 50%;
+      right: 50%;
+      margin-left: -50vw;
+      margin-right: -50vw;
+      height: clamp(170px, 22vw, 320px);
+      overflow: hidden;
+      margin-top: 18px;
+      margin-bottom: 24px;
+      pointer-events: none;
     }
 
-    .hero-banner-img {
+    .hero-banner-full img {
       width: 100%;
-      max-width: 480px;
-      height: auto;
-      border-radius: 16px;
-      border: 1px solid var(--line);
-      box-shadow: 0 10px 28px -10px var(--sh);
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
       display: block;
-      transition: transform .25s ease, box-shadow .25s ease;
+      -webkit-mask-image: radial-gradient(ellipse 96% 88% at 50% 32%, #000 52%, transparent 100%);
+      mask-image: radial-gradient(ellipse 96% 88% at 50% 32%, #000 52%, transparent 100%);
     }
 
-    .hero-banner-img:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 16px 36px -10px color-mix(in srgb, var(--a) 25%, transparent);
+    .hero-banner-full::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(to bottom, transparent 60%, var(--bg) 100%),
+        linear-gradient(to right, var(--bg) 0%, transparent 10%, transparent 90%, var(--bg) 100%);
+      pointer-events: none;
     }
 
     .hero {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 32px;
+      gap: 30px;
       align-items: center;
       min-height: calc(100vh - 90px);
       padding-bottom: 50px;
@@ -560,8 +555,20 @@
       justify-content: center;
       flex-wrap: wrap;
       font-size: 13px;
-      font-weight: 500;
       color: var(--mute);
+    }
+
+    .legend i {
+      display: inline-block;
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      margin-right: 6px;
+      background: var(--c);
+    }
+
+    .legend i.w {
+      background: var(--b);
     }
 
     .tip3 {
@@ -570,9 +577,8 @@
       transform: translate(-50%, -135%);
       padding: 9px 13px;
       border-radius: 12px;
-      background: var(--glass);
+      background: var(--bg);
       border: 1px solid var(--line);
-      color: var(--ink);
       font-size: 13px;
       white-space: nowrap;
       z-index: 2;
@@ -595,10 +601,10 @@
       font-size: 18px;
     }
 
-    /* Grids & Cards */
     .grid {
       display: grid;
-      gap: 20px;
+      gap: 18px;
+      perspective: 1000px;
     }
 
     .g3 {
@@ -611,76 +617,55 @@
 
     .card {
       position: relative;
-      border-radius: 20px;
+      border-radius: 22px;
       padding: 26px;
       background: var(--glass);
       border: 1px solid var(--line);
-      box-shadow: 0 4px 18px -4px var(--sh);
-      transition: transform .22s ease-out, border-color .22s, box-shadow .22s;
+      backdrop-filter: blur(10px);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08);
+      transform-style: preserve-3d;
+      transition: transform .2s ease-out, border-color .3s;
       overflow: hidden;
+    }
+
+    .card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(260px circle at var(--mx, 50%) var(--my, 0%), color-mix(in srgb, var(--a) 30%, transparent), transparent 60%);
+      opacity: 0;
+      transition: opacity .3s;
+      pointer-events: none;
     }
 
     .card:hover {
       border-color: var(--a);
-      box-shadow: 0 16px 36px -10px color-mix(in srgb, var(--a) 25%, transparent);
+    }
+
+    .card:hover::after {
+      opacity: 1;
     }
 
     .card h3 {
-      font: 700 22px/1.25 'Bricolage Grotesque', sans-serif;
+      font: 700 22px 'Bricolage Grotesque', sans-serif;
       letter-spacing: -.02em;
-      margin: 0 0 10px;
-      color: var(--ink);
+      margin: 0 0 8px;
     }
 
     .card p {
       margin: 0;
       color: var(--mute);
-      font: 400 15px/1.6 'Hanken Grotesk', system-ui, sans-serif;
     }
 
     .num {
-      font: 800 44px/1 'Bricolage Grotesque', sans-serif;
-      color: var(--a);
-      display: inline-block;
-      margin-bottom: 12px;
-      letter-spacing: -.03em;
+      font: 800 56px 'Bricolage Grotesque', sans-serif;
+      color: transparent;
+      -webkit-text-stroke: 1.5px var(--a);
+      display: block;
+      line-height: 1;
+      margin-bottom: 8px;
     }
 
-    /* Final high-contrast summary card */
-    .card.summary-card {
-      background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%) !important;
-      border-color: #4338ca !important;
-      color: #ffffff !important;
-      box-shadow: 0 16px 36px -10px rgba(30, 27, 75, 0.45) !important;
-    }
-
-    .card.summary-card h3 {
-      color: #ffffff !important;
-      font-size: 28px !important;
-      line-height: 1.15;
-      margin: 12px 0 8px;
-    }
-
-    .card.summary-card p {
-      color: #e0e7ff !important;
-      font-size: 14px !important;
-    }
-
-    .summary-tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 4px 10px;
-      border-radius: 99px;
-      font: 700 11px/1 'Hanken Grotesk', sans-serif;
-      text-transform: uppercase;
-      letter-spacing: .08em;
-      background: rgba(255, 255, 255, 0.16);
-      color: #c7d2fe;
-      border: 1px solid rgba(255, 255, 255, 0.22);
-    }
-
-    /* Interactive Demo & Review */
     .demo {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -691,9 +676,9 @@
       border-radius: 24px;
       border: 1px solid var(--line);
       background: var(--glass);
+      backdrop-filter: blur(12px);
       padding: 24px;
       min-height: 450px;
-      box-shadow: 0 8px 24px -8px var(--sh);
     }
 
     .pane h4 {
@@ -701,8 +686,6 @@
       margin: 0 0 16px;
       display: flex;
       justify-content: space-between;
-      align-items: center;
-      color: var(--ink);
     }
 
     .st {
@@ -717,8 +700,7 @@
       border-radius: 12px;
       margin-bottom: 6px;
       font-size: 15px;
-      color: var(--ink);
-      transition: .25s;
+      transition: .3s;
     }
 
     .line b {
@@ -732,7 +714,7 @@
     }
 
     .line.clash {
-      background: color-mix(in srgb, var(--b) 16%, transparent);
+      background: color-mix(in srgb, var(--b) 20%, transparent);
       box-shadow: inset 3px 0 var(--b);
     }
 
@@ -741,15 +723,14 @@
       padding: 13px 16px;
       margin-bottom: 9px;
       border: 1px solid var(--line);
-      background: color-mix(in srgb, var(--ink) 3%, #ffffff);
-      color: var(--ink);
+      background: color-mix(in srgb, var(--ink) 5%, transparent);
       animation: pop .5s cubic-bezier(.2, 1.4, .4, 1) both;
     }
 
     @keyframes pop {
       from {
         opacity: 0;
-        transform: translateY(14px) rotateX(-20deg);
+        transform: translateY(14px) rotateX(-30deg);
       }
     }
 
@@ -762,9 +743,8 @@
       border-radius: 16px;
       padding: 16px;
       margin: 12px 0;
-      background: color-mix(in srgb, var(--b) 12%, #ffffff);
+      background: color-mix(in srgb, var(--b) 16%, transparent);
       border: 1px solid var(--b);
-      color: var(--ink);
       animation: pop .5s both;
     }
 
@@ -777,7 +757,7 @@
       font: 600 14px 'Hanken Grotesk';
       border-radius: 10px;
       border: 1px solid var(--b);
-      background: #ffffff;
+      background: transparent;
       color: var(--b);
       padding: 8px 14px;
       margin: 0 8px 6px 0;
@@ -791,7 +771,7 @@
     }
 
     .done {
-      background: color-mix(in srgb, var(--ok) 12%, #ffffff);
+      background: color-mix(in srgb, var(--ok) 14%, transparent);
       border-color: var(--ok);
     }
 
@@ -801,26 +781,26 @@
       padding: 50px 10px;
     }
 
+    /* Editable textarea for Wispr Flow / custom transcript */
     .tx-box {
       width: 100%;
       box-sizing: border-box;
-      background: #ffffff;
+      background: color-mix(in srgb, var(--bg) 75%, transparent);
       border: 1px solid var(--line);
       color: var(--ink);
       font: 400 13px/1.6 'Hanken Grotesk', system-ui, sans-serif;
       border-radius: 14px;
-      padding: 12px 14px;
+      padding: 11px 14px;
       resize: vertical;
       min-height: 96px;
       margin-top: 8px;
       outline: none;
-      box-shadow: inset 0 1px 3px rgba(15, 23, 42, 0.05);
       transition: border-color .2s, box-shadow .2s;
     }
 
     .tx-box:focus {
-      border-color: var(--a);
-      box-shadow: 0 0 0 2px color-mix(in srgb, var(--a) 25%, transparent);
+      border-color: var(--c);
+      box-shadow: 0 0 0 2px color-mix(in srgb, var(--c) 25%, transparent);
     }
 
     .tx-label {
@@ -841,12 +821,12 @@
       border-radius: 99px;
       font-size: 11px;
       font-weight: 600;
-      background: color-mix(in srgb, var(--c) 14%, transparent);
+      background: color-mix(in srgb, var(--c) 16%, transparent);
       color: var(--c);
       border: 1px solid color-mix(in srgb, var(--c) 30%, transparent);
     }
 
-    /* hold-to-approve gate */
+    /* Hold-to-approve gate */
     .hold {
       position: relative;
       overflow: hidden;
@@ -866,14 +846,14 @@
       position: relative;
     }
 
-    /* Memory graph */
+    /* Decision Memory Graph */
     .mem {
       border-radius: 26px;
       border: 1px solid var(--line);
       background: var(--glass);
-      padding: 22px;
+      backdrop-filter: blur(12px);
+      padding: 20px;
       position: relative;
-      box-shadow: 0 8px 24px -8px var(--sh);
     }
 
     .mem svg {
@@ -886,7 +866,6 @@
       font-family: 'Hanken Grotesk';
       fill: var(--mute);
       font-size: 13px;
-      font-weight: 600;
     }
 
     .mem .nd {
@@ -915,12 +894,12 @@
     }
 
     .tip {
-      margin-top: 12px;
+      margin-top: 10px;
       min-height: 48px;
       color: var(--ink);
     }
 
-    /* Digest tabs */
+    /* Weekly Digest Tabs */
     .tabs {
       display: flex;
       gap: 10px;
@@ -933,19 +912,18 @@
       padding: 10px 18px;
       border-radius: 99px;
       border: 1px solid var(--line);
-      background: var(--glass);
+      background: transparent;
       color: var(--mute);
       cursor: pointer;
-      transition: all .2s;
     }
 
     .tabs button[aria-selected=true] {
       background: var(--ink);
-      color: #ffffff;
+      color: var(--bg);
       border-color: var(--ink);
     }
 
-    /* Theme dock */
+    /* Dark Theme Dock (Nightfall, Aurora, Ember only) */
     .dock {
       position: fixed;
       right: 18px;
@@ -966,18 +944,16 @@
       height: 26px;
       border-radius: 50%;
       border: 2px solid transparent;
-      box-shadow: inset 0 0 0 1px var(--line);
       cursor: pointer;
-      transition: transform .2s, border-color .2s, box-shadow .2s;
+      transition: transform .2s;
     }
 
     .dock button:hover {
-      transform: scale(1.22);
+      transform: scale(1.25);
     }
 
     .dock button[aria-pressed=true] {
       border-color: var(--ink);
-      box-shadow: 0 0 0 2px color-mix(in srgb, var(--a) 40%, transparent);
     }
 
     footer {
@@ -988,6 +964,18 @@
       justify-content: space-between;
       flex-wrap: wrap;
       gap: 10px;
+    }
+
+    /* Fade-up scroll reveal */
+    .reveal {
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity .7s cubic-bezier(.2, .8, .2, 1), transform .7s cubic-bezier(.2, .8, .2, 1);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
     }
 
     @media(max-width:900px) {
@@ -1028,13 +1016,18 @@
         animation: none !important;
         transition: none !important;
       }
+      .reveal {
+        opacity: 1 !important;
+        transform: none !important;
+      }
     }
   </style>
 </head>
 
 <body>
   <div class="bg" aria-hidden="true">
-    <div class="floor"></div><svg viewBox="0 0 1200 160" preserveAspectRatio="none">
+    <div class="floor"></div>
+    <svg viewBox="0 0 1200 160" preserveAspectRatio="none">
       <path d="M0 80H380l20-70 30 140 30-110 20 40h60l15-30 20 60 15-30H1200" />
     </svg>
   </div>
@@ -1047,7 +1040,7 @@
     const { useState, useEffect, useRef, useCallback } = React;
     const html = htm.bind(React.createElement);
 
-    /* Headline with cursor-weight react */
+    /* Headline with cursor variable font react */
     function Wave({ text, as = 'h1', grad = false }) {
       const box = useRef(null);
       const words = text.split(' ');
@@ -1073,7 +1066,7 @@
   <//>`;
     }
 
-    /* 3D tilt card without translateZ clipping */
+    /* 3D tilt card */
     function Tilt({ children, className = '', style }) {
       const r = useRef(null);
       return html`<div ref=${r} className=${'card ' + className} style=${style}
@@ -1083,7 +1076,7 @@
             x = (e.clientX - b.left) / b.width,
             y = (e.clientY - b.top) / b.height;
       const s = r.current.style;
-      s.transform = `perspective(1000px) rotateY(${(x - .5) * 12}deg) rotateX(${-(y - .5) * 12}deg) translateY(-4px)`;
+      s.transform = `perspective(800px) rotateY(${(x - .5) * 16}deg) rotateX(${-(y - .5) * 16}deg) translateY(-2px)`;
       s.setProperty('--mx', x * 100 + '%');
       s.setProperty('--my', y * 100 + '%');
     }}
@@ -1092,13 +1085,13 @@
     }}>${children}</div>`;
     }
 
-    /* Hero: physically-lit decision tiles (large, crisp, modern) */
+    /* Hero: physically-lit glossy dark glass-ceramic decision tiles (PBR + soft shadows + studio reflections) */
     const CARDS = [
       { m: 'Nov 20 · Product sync', t: 'Payments: Stripe', b: 'Launch locked for Dec 5. Owner: Aarav.', g: 'Decision', k: '--c' },
       { m: 'Nov 21 · Standup', t: '“Let’s use Razorpay”', b: 'Priya proposes a new gateway. Rohan moves launch to Dec 10.', g: 'New proposal', k: '--b' },
       { m: 'Sankalp memory check', t: '2 conflicts found', b: 'Gateway and launch date differ from Nov 20. Waiting for your call.', g: 'Needs approval', k: '--b' }
     ];
-    const POS = [[-1.0, 1.35, -2.0], [0, 0, 0], [1.0, -1.35, 2.0]];
+    const POS = [[-.9, 1.25, -1.8], [0, 0, 0], [.9, -1.25, 1.8]];
 
     function Scene3D() {
       const box = useRef(null);
@@ -1109,22 +1102,22 @@
         R.setSize(W(), H());
         R.outputEncoding = THREE.sRGBEncoding;
         R.toneMapping = THREE.ACESFilmicToneMapping;
-        R.toneMappingExposure = 1.08;
+        R.toneMappingExposure = 1.05;
         R.shadowMap.enabled = true;
         R.shadowMap.type = THREE.PCFSoftShadowMap;
         el.appendChild(R.domElement);
 
         const S = new THREE.Scene();
-        const C = new THREE.PerspectiveCamera(31, W() / H(), .1, 100);
-        C.position.set(0, .55, 13.6);
-        C.lookAt(0, -.15, 0);
+        const C = new THREE.PerspectiveCamera(32, W() / H(), .1, 100);
+        C.position.set(0, .8, 14.5);
+        C.lookAt(0, -.2, 0);
 
         const cs = getComputedStyle(document.documentElement);
         const cv = n => new THREE.Color(cs.getPropertyValue(n).trim() || '#fff');
         const raw = n => cs.getPropertyValue(n).trim() || '#fff';
 
-        /* Card geometry: large, bevelled ceramic slab */
-        const w = 5.0, h = 2.5, r = .28, sh = new THREE.Shape();
+        /* Geometry: rounded, bevelled slab */
+        const w = 4.4, h = 2.2, r = .26, sh = new THREE.Shape();
         sh.moveTo(-w / 2 + r, -h / 2);
         sh.lineTo(w / 2 - r, -h / 2);
         sh.quadraticCurveTo(w / 2, -h / 2, w / 2, -h / 2 + r);
@@ -1136,21 +1129,21 @@
         sh.quadraticCurveTo(-w / 2, -h / 2, -w / 2 + r, -h / 2);
 
         const geo = new THREE.ExtrudeGeometry(sh, {
-          depth: .16,
+          depth: .14,
           bevelEnabled: true,
-          bevelThickness: .06,
-          bevelSize: .06,
-          bevelSegments: 8,
-          curveSegments: 20
+          bevelThickness: .05,
+          bevelSize: .05,
+          bevelSegments: 6,
+          curveSegments: 18
         });
         geo.center();
 
         const body = new THREE.MeshPhysicalMaterial({
-          roughness: .22,
-          metalness: .04,
+          roughness: .38,
+          metalness: .15,
           clearcoat: 1,
-          clearcoatRoughness: .06,
-          envMapIntensity: 1.0
+          clearcoatRoughness: .12,
+          envMapIntensity: 1.1
         });
 
         const G = new THREE.Group();
@@ -1168,7 +1161,7 @@
 
           const tm = new THREE.MeshBasicMaterial({ transparent: true, toneMapped: false });
           const pl = new THREE.Mesh(new THREE.PlaneGeometry(w, h), tm);
-          pl.position.z = .142;
+          pl.position.z = .126;
           g.add(pl);
 
           g.position.set(...POS[i]);
@@ -1177,20 +1170,20 @@
           tiles.push(g);
         });
 
-        /* Amber light strip on front card */
+        /* Amber light strip + spill on the front tile */
         const strip = new THREE.Mesh(
-          new THREE.BoxGeometry(w - .9, .05, .02),
+          new THREE.BoxGeometry(w - .9, .045, .02),
           new THREE.MeshBasicMaterial({ toneMapped: false })
         );
-        strip.position.set(0, -h / 2 + .2, .145);
+        strip.position.set(0, -h / 2 + .2, .13);
         tiles[2].add(strip);
 
-        const spill = new THREE.PointLight(0xffffff, .8, 7);
+        const spill = new THREE.PointLight(0xffffff, .9, 7);
         spill.position.set(0, -.6, 1.2);
         tiles[2].add(spill);
 
-        /* Lights + floor shadow */
-        const key = new THREE.DirectionalLight(0xffffff, 1.4);
+        /* Lights + shadow-only floor */
+        const key = new THREE.DirectionalLight(0xffffff, 1.15);
         key.position.set(4, 9, 7);
         key.castShadow = true;
         key.shadow.mapSize.set(2048, 2048);
@@ -1199,22 +1192,21 @@
         key.shadow.normalBias = .03;
         S.add(key);
 
-        const rim = new THREE.PointLight(0xffffff, 0.9, 22);
+        const rim = new THREE.PointLight(0xffffff, 1.1, 22);
         rim.position.set(-6, 3, -5);
         S.add(rim);
 
-        const ambient = new THREE.AmbientLight(0xffffff, .75);
-        S.add(ambient);
+        S.add(new THREE.AmbientLight(0xffffff, .25));
 
         const floor = new THREE.Mesh(
-          new THREE.PlaneGeometry(44, 44).rotateX(-Math.PI / 2),
-          new THREE.ShadowMaterial({ opacity: .14 })
+          new THREE.PlaneGeometry(40, 40).rotateX(-Math.PI / 2),
+          new THREE.ShadowMaterial({ opacity: .42 })
         );
-        floor.position.y = -3.2;
+        floor.position.y = -3.1;
         floor.receiveShadow = true;
         S.add(floor);
 
-        /* Canvas text textures: high density, crisp contrast */
+        /* Text textures */
         const wrap = (x, t, mw) => {
           const L = [];
           let l = '';
@@ -1229,51 +1221,39 @@
           return L;
         };
 
-        const draw = (c, light) => {
+        const draw = c => {
           const cn = document.createElement('canvas');
-          cn.width = 1200;
-          cn.height = 600;
-          const x = cn.getContext('2d'), P = 70;
+          cn.width = 1100;
+          cn.height = 550;
+          const x = cn.getContext('2d'), P = 72;
 
-          // Header date
-          x.fillStyle = light ? '#475569' : raw('--mute');
-          x.font = '700 30px "Hanken Grotesk",sans-serif';
-          x.fillText(c.m, P, 105);
+          x.fillStyle = raw('--mute');
+          x.font = '600 30px "Hanken Grotesk",sans-serif';
+          x.fillText(c.m, P, 100);
 
-          // Card title
-          x.fillStyle = light ? '#0f172a' : raw('--ink');
-          x.font = '800 74px "Bricolage Grotesque","Trebuchet MS",sans-serif';
-          x.fillText(c.t, P, 205);
+          x.fillStyle = raw('--ink');
+          x.font = '700 70px "Bricolage Grotesque","Trebuchet MS",sans-serif';
+          x.fillText(c.t, P, 195);
 
-          // Card body
-          x.fillStyle = light ? '#334155' : raw('--ink');
-          x.font = '500 34px "Hanken Grotesk",sans-serif';
-          wrap(x, c.b, 1040).forEach((l, j) => x.fillText(l, P, 280 + j * 48));
-
-          // Badge pill
-          const tw = x.measureText(c.g).width + 48, ty = 460;
-          const badgeColor = raw(c.k);
-          x.fillStyle = badgeColor;
-          x.globalAlpha = light ? .14 : .25;
-          x.beginPath();
-          x.moveTo(P + 22, ty);
-          x.arcTo(P + tw, ty, P + tw, ty + 54, 27);
-          x.arcTo(P + tw, ty + 54, P, ty + 54, 27);
-          x.arcTo(P, ty + 54, P, ty, 27);
-          x.arcTo(P, ty, P + tw, ty, 27);
-          x.fill();
-
-          if (light) {
-            x.strokeStyle = badgeColor;
-            x.lineWidth = 2.5;
-            x.globalAlpha = .35;
-            x.stroke();
-          }
+          x.globalAlpha = .85;
+          x.font = '400 33px "Hanken Grotesk",sans-serif';
+          wrap(x, c.b, 940).forEach((l, j) => x.fillText(l, P, 268 + j * 46));
 
           x.globalAlpha = 1;
-          x.fillStyle = badgeColor;
-          x.font = '700 28px "Hanken Grotesk",sans-serif';
-          x.fillText(c.g, P + 24, ty + 38);
+          x.font = '600 28px "Hanken Grotesk",sans-serif';
+          const tw = x.measureText(c.g).width + 44, ty = 410;
+          x.fillStyle = raw(c.k);
+          x.globalAlpha = .22;
+          x.beginPath();
+          x.moveTo(P + 22, ty);
+          x.arcTo(P + tw, ty, P + tw, ty + 50, 25);
+          x.arcTo(P + tw, ty + 50, P, ty + 50, 25);
+          x.arcTo(P, ty + 50, P, ty, 25);
+          x.arcTo(P, ty, P + tw, ty, 25);
+          x.fill();
+
+          x.globalAlpha = 1;
+          x.fillText(c.g, P + 22, ty + 35);
 
           const t = new THREE.CanvasTexture(cn);
           t.encoding = THREE.sRGBEncoding;
@@ -1281,76 +1261,56 @@
           return t;
         };
 
-        /* Studio softbox reflections */
+        /* Studio reflections (softboxes in theme colours) */
         const pm = new THREE.PMREMGenerator(R);
         let envT = null;
-        const env = (light) => {
+        const env = () => {
           const e = new THREE.Scene();
-          const bgCol = light ? 0xf1f5f9 : 0x090912;
-          e.add(new THREE.Mesh(new THREE.BoxGeometry(30, 30, 30), new THREE.MeshBasicMaterial({ color: bgCol, side: THREE.BackSide })));
+          e.add(new THREE.Mesh(new THREE.BoxGeometry(30, 30, 30), new THREE.MeshBasicMaterial({ color: 0x090912, side: THREE.BackSide })));
           const pn = (a, b, col, k, x, y, z) => {
             const m = new THREE.Mesh(new THREE.PlaneGeometry(a, b), new THREE.MeshBasicMaterial({ color: col.clone().multiplyScalar(k), side: THREE.DoubleSide }));
             m.position.set(x, y, z);
             m.lookAt(0, 0, 0);
             e.add(m);
           };
-          if (light) {
-            pn(14, 6, new THREE.Color(0xffffff), 2.2, 0, 12, 5);
-            pn(4, 16, cv('--a'), 2.2, -13, 2, 3);
-            pn(4, 16, cv('--c'), 2.2, 13, 2, -3);
-            pn(10, 3, new THREE.Color(0xffffff), 1.8, 0, -1, 14);
-          } else {
-            pn(14, 6, new THREE.Color(0xffffff), 5, 0, 12, 5);
-            pn(3, 16, cv('--a'), 6, -13, 2, 3);
-            pn(3, 16, cv('--c'), 5, 13, 2, -3);
-            pn(10, 3, new THREE.Color(0xffffff), 2, 0, -1, 14);
-          }
+          pn(14, 6, new THREE.Color(0xffffff), 5, 0, 12, 5);
+          pn(3, 16, cv('--a'), 6, -13, 2, 3);
+          pn(3, 16, cv('--c'), 5, 13, 2, -3);
+          pn(10, 3, new THREE.Color(0xffffff), 2, 0, -1, 14);
+
           if (envT) envT.dispose();
           envT = pm.fromScene(e, .03).texture;
           S.environment = envT;
         };
 
         const paint = () => {
-          const bg = cv('--bg'), light = bg.getHSL({}).l > .5;
-          const bc = light ? new THREE.Color(0xffffff) : cv('--bg2').multiplyScalar(.8);
+          const bc = cv('--bg2').multiplyScalar(0.8);
           body.color.copy(bc);
-          body.roughness = light ? .22 : .38;
-          body.metalness = light ? .04 : .15;
-          body.clearcoat = 1;
-          body.clearcoatRoughness = light ? .06 : .12;
-          body.envMapIntensity = light ? 1.0 : 1.1;
-
-          key.intensity = light ? 1.4 : 1.15;
-          ambient.intensity = light ? .75 : .25;
-          floor.material.opacity = light ? .14 : .42;
-
           rim.color.copy(cv('--a'));
           spill.color.copy(cv('--b'));
-          spill.intensity = light ? 0.7 : 0.9;
           strip.material.color.copy(cv('--b'));
-
           tiles.forEach((g, i) => {
             const o = g.userData.tm.map;
             if (o) o.dispose();
-            g.userData.tm.map = draw(CARDS[i], light);
+            g.userData.tm.map = draw(CARDS[i]);
             g.userData.tm.needsUpdate = true;
           });
-          env(light);
+          env();
         };
 
         paint();
         try {
           Promise.all([
-            document.fonts.load('700 74px "Bricolage Grotesque"'),
-            document.fonts.load('500 34px "Hanken Grotesk"'),
-            document.fonts.load('700 30px "Hanken Grotesk"')
+            document.fonts.load('700 70px "Bricolage Grotesque"'),
+            document.fonts.load('400 33px "Hanken Grotesk"'),
+            document.fonts.load('600 30px "Hanken Grotesk"')
           ]).then(paint);
         } catch (e) { }
 
         const mo = new MutationObserver(() => setTimeout(paint, 30));
         mo.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
 
-        /* Motion & tilt */
+        /* Motion: gentle float, soft cursor parallax, lift on hover */
         const still = matchMedia('(prefers-reduced-motion:reduce)').matches,
               cvs = R.domElement,
               ray = new THREE.Raycaster(),
@@ -1378,13 +1338,13 @@
 
         const loop = () => {
           t += .016;
-          cx += (mx - cx) * .06;
-          cy += (my - cy) * .06;
-          G.rotation.y = -.48 + cx * .24;
-          G.rotation.x = .06 - cy * .09;
+          cx += (mx - cx) * .05;
+          cy += (my - cy) * .05;
+          G.rotation.y = -.5 + cx * .22;
+          G.rotation.x = .07 - cy * .08;
           tiles.forEach((g, i) => {
             const u = g.userData;
-            u.l += ((hov === i ? .32 : 0) - u.l) * .1;
+            u.l += ((hov === i ? .28 : 0) - u.l) * .1;
             g.position.y = u.base + u.l + (still ? 0 : Math.sin(t * .8 + i * 1.3) * .07);
           });
           R.render(S, C);
@@ -1404,21 +1364,13 @@
 
       return html`<div className="stage" role="img" aria-label="Three glossy 3D cards for two meetings and a memory check that found two conflicts">
     <div className="cv" ref=${box}></div>
-    <div className="legend"><span>Move your cursor over the cards</span></div>
+    <div className="legend"><span><i className=""></i>Decision</span><span><i className="w"></i>Conflict</span><span>Move your cursor over the cards</span></div>
   </div>`;
     }
 
     function Hero() {
       return html`<header className="hero">
     <div>
-      <div className="hero-banner-wrap">
-        <img
-          src="sankalp-banner.png"
-          alt="Sankalp — Meeting-to-Execution Agent"
-          className="hero-banner-img"
-          onError=${e => { if (e.currentTarget.parentElement) e.currentTarget.parentElement.style.display = 'none'; }}
-        />
-      </div>
       <${Wave} text="Meetings end." grad=${false}/>
       <${Wave} text="Decisions don’t." grad=${true}/>
       <p className="lead">Sankalp turns every transcript into confirmed decisions, owned tasks and deadlines, and catches it the moment a new meeting contradicts an old one.</p>
@@ -1610,7 +1562,7 @@
       const bDecs = hasBackendItems ? (backendData.staged_items.decisions || []) : [];
       const bTasks = hasBackendItems ? (backendData.staged_items.tasks || []) : [];
 
-      return html`<section id="demo"><${Wave} text="Run it on a real meeting." as="h2"/>
+      return html`<section id="demo" className="reveal"><${Wave} text="Run it on a real meeting." as="h2"/>
   <p className="sub">Extract the items, resolve the conflict, then hold the button to approve. Nothing reaches the tracker before that.</p>
   <div className="demo">
     <div className="pane"><h4>Today’s standup <span className="st">Nov 21</span></h4>
@@ -1700,7 +1652,7 @@
       const N = Object.fromEntries(nodes.map(n => [n.id, n]));
       const n = h && N[h];
 
-      return html`<section id="memory"><${Wave} text="Memory across every meeting." as="h2"/>
+      return html`<section id="memory" className="reveal"><${Wave} text="Memory across every meeting." as="h2"/>
   <p className="sub">Each decision becomes a node. When a new one touches an old one, the link turns amber. Hover a node to see where it came from.</p>
   <div className="mem"><svg viewBox="0 0 740 310" role="img" aria-label="Decision memory graph across three meetings">
     ${['Nov 18', 'Nov 20', 'Nov 21'].map((d, i) => html`<text key=${d} x=${90 + i * 275} y="22" textAnchor="middle" style=${{ textAnchor: 'middle' }}>${d}</text>`)}
@@ -1753,13 +1705,13 @@
 
       const items = liveDigest[n] || D[n] || [];
 
-      return html`<section id="digest"><${Wave} text="One weekly recap per person." as="h2"/>
+      return html`<section id="digest" className="reveal"><${Wave} text="One weekly recap per person." as="h2"/>
   <p className="sub">Pick a teammate to see the digest they’d get on Monday.</p>
   <div className="tabs" role="tablist">${Object.keys(D).map(k => html`<button key=${k} role="tab" aria-selected=${k === n} onClick=${() => setN(k)}>${k}</button>`)}</div>
-  <div style=${{ maxWidth: 640 }}><${Tilt}><h3>${n}’s week</h3><ul style=${{ margin: '12px 0 0', paddingLeft: 20 }}>${items.map(x => html`<li key=${x} style=${{ marginBottom: 8, color: 'var(--ink)' }}>${x}</li>`)}</ul><//></div></section>`;
+  <div style=${{ maxWidth: 640, perspective: 900 }}><${Tilt}><h3>${n}’s week</h3><ul style=${{ margin: '10px 0 0', paddingLeft: 20 }}>${items.map(x => html`<li key=${x} style=${{ marginBottom: 6 }}>${x}</li>`)}</ul><//></div></section>`;
     }
 
-    /* Logo: meeting pulse resolving into a tick */
+    /* Logo: meeting pulse that resolves into a tick */
     function Logo() {
       return html`<svg className="lg" viewBox="0 0 36 36" aria-hidden="true"><defs><linearGradient id="lgG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="var(--a)"/><stop offset="1" stopColor="var(--c)"/></linearGradient></defs><rect width="36" height="36" rx="11" fill="url(#lgG)"/><path d="M6 19H11L14 11L18 25L21 18L24 22L30 12" fill="none" stroke="var(--btnink)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/></svg>`;
     }
@@ -1796,81 +1748,102 @@
       ['Extraction', 'Pulls out decisions, action items, owners and deadlines.'],
       ['Memory and conflicts', 'Compares with past meetings and flags clashes like Stripe vs Razorpay.'],
       ['Confirmation gate', 'Everything waits in staging until a human approves.'],
-      ['Tracker push', 'Approved action items become real Kanban tracker tasks.'],
+      ['Tracker push', 'Approved action items become tracker tasks.'],
       ['Pre-deadline reminders', 'Owners get a nudge before the date, not after.'],
-      ['Weekly digest', 'Each person gets active duties, deadlines and memory updates.']
+      ['Weekly digest', 'Each person gets duties, deadlines and updates.']
     ];
 
+    /* Theme dock: only dark options */
     const THEMES = [
-      ['daylight', 'linear-gradient(135deg, #ffffff 45%, #4f46e5 45%)', 'Daylight (Light)'],
-      ['nightfall', '#8b6cff', 'Nightfall (Dark)'],
-      ['aurora', '#2ee6a6', 'Aurora (Teal)'],
-      ['ember', '#ff6a3d', 'Ember (Warm)']
+      ['nightfall', '#8b6cff'],
+      ['aurora', '#2ee6a6'],
+      ['ember', '#ff6a3d']
     ];
 
     function App() {
       const [th, setTh] = useState(() => {
         try {
-          const ver = localStorage.getItem('ep-theme-ver');
-          if (ver !== '3') {
-            localStorage.setItem('ep-theme-ver', '3');
-            localStorage.setItem('ep-theme', 'daylight');
-            return 'daylight';
-          }
           const saved = localStorage.getItem('ep-theme');
-          return ['daylight', 'nightfall', 'aurora', 'ember'].includes(saved) ? saved : 'daylight';
+          return ['nightfall', 'aurora', 'ember'].includes(saved) ? saved : 'nightfall';
         } catch (e) {
-          return 'daylight';
+          return 'nightfall';
         }
       });
 
       useEffect(() => {
         document.documentElement.dataset.theme = th;
-        try { localStorage.setItem('ep-theme', th); } catch (e) { }
+        try {
+          localStorage.setItem('ep-theme', th);
+        } catch (e) { }
       }, [th]);
+
+      useEffect(() => {
+        if (matchMedia('(prefers-reduced-motion:reduce)').matches) {
+          document.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'));
+          return;
+        }
+        const obs = new IntersectionObserver(entries => {
+          entries.forEach(e => {
+            if (e.isIntersecting) {
+              e.target.classList.add('visible');
+              obs.unobserve(e.target);
+            }
+          });
+        }, { threshold: 0.08 });
+        document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+        return () => obs.disconnect();
+      }, []);
 
       const [refreshVer, setRefreshVer] = useState(0);
 
       return html`<div className="wrap">
     <${Nav}/>
+
+    <div className="hero-banner-full">
+      <img
+        src="/static/sankalp-banner.png"
+        alt="Sankalp - Meetings that remember"
+        onError=${e => { if (e.currentTarget.parentElement) e.currentTarget.parentElement.style.display = 'none'; }}
+      />
+    </div>
+
     <${Hero}/>
-    <section id="problem">
+
+    <section id="problem" className="reveal">
       <${Wave} text="Decisions made in meetings get lost." as="h2"/>
       <p className="sub">Notes get buried, chats scroll away, and nobody remembers who agreed to what. A summary alone doesn’t fix that.</p>
       <div className="grid g3">
         <${Tilt}>
-          <span className="num" style=${{ color: 'var(--b)' }}>01</span>
+          <span className="num">01</span>
           <h3>Scattered follow-ups</h3>
           <p>Who decided what, who owns which task and by when, spread across notes, chat and memory.</p>
         <//>
         <${Tilt}>
-          <span className="num" style=${{ color: 'var(--a)' }}>02</span>
+          <span className="num">02</span>
           <h3>Silent contradictions</h3>
           <p>A decision changes in a later meeting, but nothing tells the team the earlier one existed.</p>
         <//>
         <${Tilt}>
-          <span className="num" style=${{ color: 'var(--c)' }}>03</span>
+          <span className="num">03</span>
           <h3>AI needs a human gate</h3>
           <p>A wrong task or deadline must never reach the tracker without someone saying yes.</p>
         <//>
       </div>
     </section>
 
-    <section id="flow">
+    <section id="flow" className="reveal">
       <${Wave} text="Seven moves from talk to action." as="h2"/>
       <p className="sub">Hover any card. Each step hands over to the next, and nothing leaves staging until you approve.</p>
       <div className="grid g4">
         ${FLOW.map((f, i) => html`
           <${Tilt} key=${i}>
-            <span className="num">${String(i + 1).padStart(2, '0')}</span>
+            <span className="num">${i + 1}</span>
             <h3>${f[0]}</h3>
             <p>${f[1]}</p>
           <//>
         `)}
-        <${Tilt} className="summary-card">
-          <span className="summary-tag">✨ Complete Pipeline</span>
-          <h3>Zero lost decisions.</h3>
-          <p>Every commitment confirmed, tracked, and remembered across your entire project lifecycle.</p>
+        <${Tilt} style=${{ background: 'linear-gradient(135deg,var(--a),var(--c))', color: 'var(--btnink)' }}>
+          <h3 style=${{ fontSize: 30, marginTop: 24, color: 'var(--btnink)' }}>Zero lost decisions.</h3>
         <//>
       </div>
     </section>
@@ -1885,7 +1858,7 @@
     </footer>
 
     <div className="dock" role="group" aria-label="Theme">
-      ${THEMES.map(t => html`<button key=${t[0]} aria-label=${(t[2] || t[0]) + ' theme'} title=${t[2] || t[0]} aria-pressed=${th === t[0]} style=${{ background: t[1] }} onClick=${() => setTh(t[0])}></button>`)}
+      ${THEMES.map(t => html`<button key=${t[0]} aria-label=${t[0] + ' theme'} aria-pressed=${th === t[0]} style=${{ background: t[1] }} onClick=${() => setTh(t[0])}></button>`)}
     </div>
   </div>`;
     }

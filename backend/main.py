@@ -72,7 +72,11 @@ app.add_middleware(
 
 # --- UI Endpoint ---
 
-BANNER_PNG = (Path(__file__).resolve().parent.parent / "frontend" / "sankalp-banner.png").resolve()
+BANNER_PNG = (Path(__file__).resolve().parent.parent / "static" / "sankalp-banner.png").resolve()
+if not BANNER_PNG.exists():
+    BANNER_PNG = (Path(__file__).resolve().parent.parent / "frontend" / "sankalp-banner.png").resolve()
+if not BANNER_PNG.exists():
+    BANNER_PNG = Path("static/sankalp-banner.png").resolve()
 if not BANNER_PNG.exists():
     BANNER_PNG = Path("frontend/sankalp-banner.png").resolve()
 
