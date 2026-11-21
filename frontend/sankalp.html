@@ -759,6 +759,50 @@
       padding: 50px 10px
     }
 
+    .tx-box {
+      width: 100%;
+      box-sizing: border-box;
+      background: color-mix(in srgb, var(--bg) 75%, transparent);
+      border: 1px solid var(--line);
+      color: var(--ink);
+      font: 400 13px/1.6 'Hanken Grotesk', system-ui, sans-serif;
+      border-radius: 14px;
+      padding: 11px 14px;
+      resize: vertical;
+      min-height: 96px;
+      margin-top: 8px;
+      outline: none;
+      transition: border-color .2s, box-shadow .2s;
+    }
+
+    .tx-box:focus {
+      border-color: var(--c);
+      box-shadow: 0 0 0 2px color-mix(in srgb, var(--c) 25%, transparent);
+    }
+
+    .tx-label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font: 600 12px 'Hanken Grotesk';
+      color: var(--mute);
+      margin-top: 14px;
+      margin-bottom: 2px;
+    }
+
+    .tx-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 8px;
+      border-radius: 99px;
+      font-size: 11px;
+      font-weight: 600;
+      background: color-mix(in srgb, var(--c) 16%, transparent);
+      color: var(--c);
+      border: 1px solid color-mix(in srgb, var(--c) 30%, transparent);
+    }
+
     /* hold-to-approve gate */
     .hold {
       position: relative;
@@ -1092,6 +1136,8 @@
     }
 
     function Demo({ onApproved }) {
+      const DEFAULT_TRANSCRIPT = LINES.map(l => `${l[1]}: ${l[2]}`).join('\n');
+      const [transcript, setTranscript] = useState(DEFAULT_TRANSCRIPT);
       const [s, setS] = useState({ ext: false, choice: null, pushed: false, loading: false, backendData: null, pushResult: null });
       const { ext, choice, pushed, loading, backendData, pushResult } = s;
       const gw = choice === 'razor' ? 'Razorpay' : 'Stripe', ln = choice === 'razor' ? 'Dec 10' : 'Dec 5';
@@ -1101,7 +1147,7 @@
 
       const handleExtract = async () => {
         setS(prev => ({ ...prev, loading: true }));
-        const transcriptText = LINES.map(l => `${l[1]}: ${l[2]}`).join('\n');
+        const transcriptText = (transcript && transcript.trim()) ? transcript.trim() : DEFAULT_TRANSCRIPT;
         try {
           const res = await fetch(`${API_BASE}/api/ingest`, {
             method: 'POST',
@@ -1248,14 +1294,30 @@
   <div className="demo">
     <div className="pane"><h4>Today’s standup <span className="st">Nov 21</span></h4>
       ${LINES.map(l => html`<div key=${l[0]} className=${'line ' + cls(l[0])}><b>${l[1]}</b><span>${l[2]}</span></div>`)}
-      <div style=${{ marginTop: 16 }}>
+
+      <div className="tx-label">
+        <span><b>Transcript Input</b> (Editable · Dictate with Wispr Flow or paste)</span>
+        <span className="tx-badge">🎙️ Wispr Flow Ready</span>
+      </div>
+      <textarea
+        className="tx-box"
+        rows="4"
+        value=${transcript}
+        onInput=${e => setTranscript(e.target.value)}
+        placeholder="Type, paste, or dictate any speaker-attributed transcript (e.g. Rahul: Let's lock in Stripe...)..."
+      />
+
+      <div style=${{ marginTop: 16, display: 'flex', gap: 10, flexWrap: 'wrap' }}>
         <button className="btn" disabled=${loading} onClick=${handleExtract}>${loading ? 'Extracting via backend...' : 'Extract from transcript'}</button>
-        <button className="btn g" onClick=${() => setS({ ext: false, choice: null, pushed: false, loading: false, backendData: null, pushResult: null })}>Reset</button>
+        <button className="btn g" onClick=${() => {
+          setTranscript(DEFAULT_TRANSCRIPT);
+          setS({ ext: false, choice: null, pushed: false, loading: false, backendData: null, pushResult: null });
+        }}>Reset</button>
       </div>
     </div>
     <div className="pane"><h4>Review and approve <span className="st">${!ext ? 'Nothing extracted yet' : loading ? 'Extracting...' : pushed ? 'Approved' : choice ? 'Conflict resolved' : (hasBackendItems ? `${bDecs.length + bTasks.length} items · ${backendData.staged_items.conflicts?.length || 1} conflict` : '4 items · 1 conflict')}</span></h4>
       ${!ext ? html`<div className="empty">Extracted decisions and tasks will appear here for review.</div>` : html`<div>
-        ${hasBackendItems ? html`<div>
+        ${hasBackendItems && (bDecs.length > 0 || bTasks.length > 0) ? html`<div>
           ${bDecs.map(d => {
             const isGw = d.topic.toLowerCase().includes('payment') || d.topic.toLowerCase().includes('gateway');
             const isLn = d.topic.toLowerCase().includes('launch') || d.topic.toLowerCase().includes('date');
