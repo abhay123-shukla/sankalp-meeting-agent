@@ -92,9 +92,8 @@ git clone https://github.com/abhay123-shukla/sankalp-meeting-agent.git
 cd sankalp-meeting-agent
 ```
 
-### 2. Install Backend Dependencies
+### 2. Install Dependencies
 ```bash
-cd backend
 pip install -r requirements.txt
 ```
 
@@ -106,8 +105,13 @@ cp .env.example .env
 *(If no API keys are provided, Sankalp automatically uses its built-in **Smart Deterministic Fallback Analyzer**, running 100% offline with zero external dependencies).*
 
 ### 4. Run the Application
+You can run the server directly from the repository root:
 ```bash
-# From the backend directory
+uvicorn backend.main:app --reload
+```
+Or from within the `backend/` directory:
+```bash
+cd backend
 uvicorn main:app --reload
 ```
 

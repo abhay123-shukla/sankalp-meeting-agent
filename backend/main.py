@@ -1,10 +1,17 @@
 import os
+import sys
 import uuid
 import logging
 from pathlib import Path
 from datetime import datetime, timezone
 from typing import Dict, Any, List, Optional
 from contextlib import asynccontextmanager
+
+# Ensure backend directory is in sys.path so both `uvicorn backend.main:app`
+# and `uvicorn main:app --app-dir backend` work cleanly from any working directory
+BACKEND_DIR = Path(__file__).resolve().parent
+if str(BACKEND_DIR) not in sys.path:
+    sys.path.insert(0, str(BACKEND_DIR))
 
 from fastapi import FastAPI, HTTPException, Query, status
 from fastapi.responses import FileResponse
