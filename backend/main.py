@@ -72,6 +72,10 @@ app.add_middleware(
 
 # --- UI Endpoint ---
 
+BANNER_PNG = (Path(__file__).resolve().parent.parent / "frontend" / "sankalp-banner.png").resolve()
+if not BANNER_PNG.exists():
+    BANNER_PNG = Path("frontend/sankalp-banner.png").resolve()
+
 @app.get("/ui", tags=["UI"], response_class=FileResponse)
 @app.get("/ui/", tags=["UI"], response_class=FileResponse)
 def serve_ui():
@@ -79,6 +83,15 @@ def serve_ui():
     if not FRONTEND_HTML.exists():
         raise HTTPException(status_code=404, detail=f"Frontend file not found at {FRONTEND_HTML}.")
     return FileResponse(str(FRONTEND_HTML), media_type="text/html")
+
+@app.get("/sankalp-banner.png", tags=["UI"], response_class=FileResponse)
+@app.get("/ui/sankalp-banner.png", tags=["UI"], response_class=FileResponse)
+@app.get("/static/sankalp-banner.png", tags=["UI"], response_class=FileResponse)
+def serve_banner():
+    """Serves the hero brand banner (frontend/sankalp-banner.png)."""
+    if not BANNER_PNG.exists():
+        raise HTTPException(status_code=404, detail=f"Banner image not found at {BANNER_PNG}.")
+    return FileResponse(str(BANNER_PNG), media_type="image/png")
 
 def mask_secret(secret: Optional[str]) -> str:
     if not secret:

@@ -496,6 +496,28 @@
       transform: none;
     }
 
+    .hero-banner-wrap {
+      margin-bottom: 22px;
+      display: inline-block;
+      max-width: 100%;
+    }
+
+    .hero-banner-img {
+      width: 100%;
+      max-width: 480px;
+      height: auto;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      box-shadow: 0 10px 28px -10px var(--sh);
+      display: block;
+      transition: transform .25s ease, box-shadow .25s ease;
+    }
+
+    .hero-banner-img:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 36px -10px color-mix(in srgb, var(--a) 25%, transparent);
+    }
+
     .hero {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -1389,6 +1411,14 @@
     function Hero() {
       return html`<header className="hero">
     <div>
+      <div className="hero-banner-wrap">
+        <img
+          src="sankalp-banner.png"
+          alt="Sankalp — Meeting-to-Execution Agent"
+          className="hero-banner-img"
+          onError=${e => { if (e.currentTarget.parentElement) e.currentTarget.parentElement.style.display = 'none'; }}
+        />
+      </div>
       <${Wave} text="Meetings end." grad=${false}/>
       <${Wave} text="Decisions don’t." grad=${true}/>
       <p className="lead">Sankalp turns every transcript into confirmed decisions, owned tasks and deadlines, and catches it the moment a new meeting contradicts an old one.</p>

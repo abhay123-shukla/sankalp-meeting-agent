@@ -21,6 +21,14 @@ def run_tests():
         assert "<!DOCTYPE html>" in res_ui.text, "Expected HTML doctype in UI response"
         print("✓ GET /ui successfully serving frontend/sankalp.html")
 
+        # Verify banner asset serving
+        res_banner = client.get("/sankalp-banner.png")
+        assert res_banner.status_code == 200, f"Banner route failed: {res_banner.status_code}"
+        assert res_banner.headers["content-type"] == "image/png"
+        res_ui_banner = client.get("/ui/sankalp-banner.png")
+        assert res_ui_banner.status_code == 200
+        print("✓ GET /sankalp-banner.png & /ui/sankalp-banner.png successfully serving frontend/sankalp-banner.png")
+
         # 2. Reset database for clean testing run
         res = client.post("/api/reset?preserve_settings=false")
         assert res.status_code == 200
