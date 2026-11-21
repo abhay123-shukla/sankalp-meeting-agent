@@ -1,0 +1,1432 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="nightfall">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Sankalp – Meetings that remember</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&family=Hanken+Grotesk:wght@400;500;600&display=swap"
+    rel="stylesheet">
+  <style>
+    :root,
+    [data-theme=nightfall] {
+      --bg: #070a16;
+      --bg2: #131a3b;
+      --ink: #eef0ff;
+      --mute: #9ea6cf;
+      --a: #8b6cff;
+      --b: #ffb454;
+      --c: #46e0d0;
+      --ok: #6ef2b0;
+      --glass: rgba(60, 70, 150, .30);
+      --line: rgba(160, 175, 255, .16);
+      --sh: #000;
+      --btnink: #070a18
+    }
+
+    [data-theme=aurora] {
+      --bg: #06141a;
+      --bg2: #0b2b33;
+      --ink: #e8fff8;
+      --mute: #8fbdb5;
+      --a: #2ee6a6;
+      --b: #7df3ff;
+      --c: #b6ff6b;
+      --ok: #6ef2b0;
+      --glass: rgba(30, 120, 120, .3);
+      --line: rgba(130, 255, 220, .18);
+      --btnink: #03211c
+    }
+
+    [data-theme=ember] {
+      --bg: #1a0a08;
+      --bg2: #3a1410;
+      --ink: #fff1e6;
+      --mute: #d3a995;
+      --a: #ff6a3d;
+      --b: #ffc94d;
+      --c: #ff9cc2;
+      --ok: #9cf2a0;
+      --glass: rgba(160, 60, 40, .3);
+      --line: rgba(255, 170, 130, .2);
+      --btnink: #2a0d05
+    }
+
+    * {
+      box-sizing: border-box
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: env(safe-area-inset-top, 0px)
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font: 400 16px/1.6 'Hanken Grotesk', system-ui, sans-serif;
+      overflow-x: hidden;
+      transition: background .5s, color .5s;
+      padding-top: env(safe-area-inset-top, 0px);
+      padding-bottom: env(safe-area-inset-bottom, 0px)
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--c);
+      outline-offset: 3px
+    }
+
+    .d {
+      font-family: 'Bricolage Grotesque', 'Trebuchet MS', sans-serif
+    }
+
+    .bg {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      overflow: hidden;
+      background: radial-gradient(1100px 650px at 85% -10%, var(--bg2), transparent 62%), radial-gradient(800px 600px at -10% 55%, color-mix(in srgb, var(--a) 28%, transparent), transparent 60%)
+    }
+
+    .floor {
+      position: absolute;
+      left: -50%;
+      right: -50%;
+      bottom: -8%;
+      height: 62%;
+      transform: perspective(500px) rotateX(62deg);
+      transform-origin: 50% 100%;
+      background: linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px);
+      background-size: 56px 56px;
+      -webkit-mask-image: linear-gradient(to top, #000 0%, transparent 55%);
+      mask-image: linear-gradient(to top, #000 0%, transparent 55%);
+      animation: fl 6s linear infinite;
+      opacity: .6
+    }
+
+    @keyframes fl {
+      to {
+        background-position: 0 56px
+      }
+    }
+
+    .bg svg {
+      position: absolute;
+      left: 0;
+      top: 34%;
+      width: 100%;
+      height: 160px;
+      opacity: .22
+    }
+
+    .bg path {
+      fill: none;
+      stroke: var(--a);
+      stroke-width: 2;
+      stroke-dasharray: 140 1400;
+      animation: bt 5s linear infinite;
+      filter: drop-shadow(0 0 6px var(--a))
+    }
+
+    @keyframes bt {
+      to {
+        stroke-dashoffset: -1540
+      }
+    }
+
+    .wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px
+    }
+
+    .nav {
+      position: sticky;
+      top: calc(12px + env(safe-area-inset-top, 0px));
+      z-index: 30;
+      margin: 12px 0 0;
+      padding: 9px 12px 9px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-radius: 20px;
+      background: color-mix(in srgb, var(--bg) 60%, transparent);
+      border: 1px solid var(--line);
+      backdrop-filter: blur(16px) saturate(1.4);
+      box-shadow: 0 16px 40px -20px #000
+    }
+
+    .navl {
+      position: relative;
+      display: flex;
+      gap: 2px
+    }
+
+    .navl a {
+      position: relative;
+      z-index: 1;
+      padding: 9px 15px;
+      border-radius: 99px;
+      color: var(--mute);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color .2s
+    }
+
+    .navl a.on {
+      color: var(--ink)
+    }
+
+    .pill {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      border-radius: 99px;
+      background: color-mix(in srgb, var(--ink) 10%, transparent);
+      box-shadow: inset 0 0 0 1px var(--line);
+      transition: left .28s cubic-bezier(.2, .8, .2, 1), width .28s cubic-bezier(.2, .8, .2, 1), opacity .2s
+    }
+
+    .btn.sm {
+      padding: 10px 18px;
+      font-size: 14px;
+      border-radius: 12px
+    }
+
+    .pvp {
+      position: absolute;
+      top: calc(100% + 10px);
+      width: min(400px, calc(100vw - 48px));
+      padding: 18px;
+      border-radius: 20px;
+      background: color-mix(in srgb, var(--bg2) 90%, transparent);
+      border: 1px solid var(--line);
+      backdrop-filter: blur(18px);
+      box-shadow: 0 30px 60px -20px #000, inset 0 1px 0 rgba(255, 255, 255, .08);
+      transform-origin: top center;
+      animation: pvin .3s cubic-bezier(.2, .9, .3, 1) both
+    }
+
+    @keyframes pvin {
+      from {
+        opacity: 0;
+        transform: perspective(800px) rotateX(-14deg) translateY(-8px) scale(.97)
+      }
+    }
+
+    .pvp h5 {
+      font: 700 18px 'Bricolage Grotesque', sans-serif;
+      margin: 0 0 2px
+    }
+
+    .pvp p {
+      margin: 0 0 14px;
+      color: var(--mute);
+      font-size: 14px
+    }
+
+    .pvr {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      padding: 9px 11px;
+      border-radius: 11px;
+      background: color-mix(in srgb, var(--ink) 5%, transparent);
+      margin-bottom: 7px;
+      font-size: 14px
+    }
+
+    .pvr i {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex: none
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px
+    }
+
+    .chips span {
+      padding: 6px 11px;
+      border-radius: 99px;
+      font-size: 13px;
+      font-weight: 600;
+      border: 1px solid var(--line);
+      color: var(--mute)
+    }
+
+    .chips span.k {
+      border-color: var(--b);
+      color: var(--b)
+    }
+
+    .mini {
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      padding: 12px;
+      font-size: 13px;
+      background: color-mix(in srgb, var(--bg) 60%, transparent)
+    }
+
+    .bar {
+      height: 34px;
+      border-radius: 10px;
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(120deg, var(--c), var(--a));
+      color: var(--btnink);
+      font: 700 13px 'Bricolage Grotesque', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 10px
+    }
+
+    .bar::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(255, 255, 255, .45);
+      transform-origin: left;
+      animation: fill 2.2s ease-in-out infinite
+    }
+
+    .bar span {
+      position: relative;
+      z-index: 1
+    }
+
+    @keyframes fill {
+      0% {
+        transform: scaleX(0)
+      }
+
+      70%,
+      100% {
+        transform: scaleX(1)
+      }
+    }
+
+    .av {
+      display: flex;
+      gap: 10px
+    }
+
+    .av div {
+      flex: 1;
+      text-align: center;
+      font-size: 12px;
+      color: var(--mute)
+    }
+
+    .av b {
+      display: grid;
+      place-items: center;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      margin: 0 auto 6px;
+      background: linear-gradient(135deg, var(--a), var(--c));
+      color: var(--btnink);
+      font: 800 14px 'Bricolage Grotesque', sans-serif
+    }
+
+    .av u {
+      display: block;
+      height: 5px;
+      border-radius: 5px;
+      background: var(--line);
+      margin-top: 4px;
+      text-decoration: none;
+      overflow: hidden
+    }
+
+    .av u::after {
+      content: "";
+      display: block;
+      height: 100%;
+      width: var(--w);
+      background: var(--c)
+    }
+
+    .pvp .cf {
+      stroke: var(--b);
+      stroke-width: 2;
+      stroke-dasharray: 5 5;
+      animation: dash .8s linear infinite;
+      fill: none
+    }
+
+    .logo {
+      font: 800 24px 'Bricolage Grotesque', sans-serif;
+      letter-spacing: -.03em;
+      display: flex;
+      gap: 10px;
+      align-items: center
+    }
+
+    .lg {
+      width: 34px;
+      height: 34px;
+      flex: none;
+      filter: drop-shadow(0 6px 14px color-mix(in srgb, var(--a) 55%, transparent))
+    }
+
+    .lg path {
+      stroke-dasharray: 80;
+      animation: dr 1.6s .3s ease-out both
+    }
+
+    @keyframes dr {
+      from {
+        stroke-dashoffset: 80
+      }
+    }
+
+    .logo:hover .lg {
+      transform: rotate(-6deg) scale(1.06)
+    }
+
+    .lg {
+      transition: transform .3s
+    }
+
+    @keyframes pg {
+      0% {
+        box-shadow: 0 0 0 0 var(--a)
+      }
+
+      70%,
+      100% {
+        box-shadow: 0 0 0 14px transparent
+      }
+    }
+
+    /* headline that reacts to the cursor (variable font width + weight) */
+    .wave {
+      font: 700 clamp(40px, 5.6vw, 84px)/1.02 'Bricolage Grotesque', sans-serif;
+      letter-spacing: -.025em;
+      margin: 0 0 22px;
+      cursor: default
+    }
+
+    .wave span {
+      display: inline-block;
+      font-variation-settings: 'wght' 700, 'wdth' 100;
+      transition: font-variation-settings .18s, transform .18s;
+      white-space: pre
+    }
+
+    .wave.g span {
+      background: linear-gradient(95deg, var(--a), var(--c));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent
+    }
+
+    .wave .w {
+      display: inline-block;
+      white-space: nowrap;
+      margin-right: .24em
+    }
+
+    h2.wave {
+      font-size: clamp(30px, 4vw, 54px);
+      letter-spacing: -.03em;
+      max-width: 16em
+    }
+
+    .lead {
+      color: var(--mute);
+      font-size: 19px;
+      max-width: 30em;
+      margin: 0 0 30px
+    }
+
+    .btn {
+      font: 700 16px 'Bricolage Grotesque', sans-serif;
+      color: var(--btnink);
+      background: linear-gradient(120deg, var(--c), var(--a));
+      border: 0;
+      border-radius: 14px;
+      padding: 15px 26px;
+      cursor: pointer;
+      transition: transform .25s, box-shadow .25s;
+      box-shadow: 0 10px 30px -10px var(--a)
+    }
+
+    .btn:hover {
+      transform: translateY(-3px) scale(1.03);
+      box-shadow: 0 18px 40px -10px var(--a)
+    }
+
+    .btn.g {
+      background: transparent;
+      color: var(--ink);
+      border: 1px solid var(--line);
+      box-shadow: none;
+      margin-left: 10px
+    }
+
+    .btn[disabled] {
+      opacity: .35;
+      cursor: not-allowed;
+      transform: none
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      align-items: center;
+      min-height: calc(100vh - 90px);
+      padding-bottom: 50px
+    }
+
+    /* ---------- real WebGL scene ---------- */
+    .stage {
+      position: relative;
+      height: 600px
+    }
+
+    .cv {
+      position: absolute;
+      inset: 0 0 30px 0
+    }
+
+    .cv canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+      cursor: grab;
+      touch-action: pan-y
+    }
+
+    .cv canvas:active {
+      cursor: grabbing
+    }
+
+    .legend {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+      font-size: 13px;
+      color: var(--mute)
+    }
+
+    .legend i {
+      display: inline-block;
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      margin-right: 6px;
+      background: var(--c)
+    }
+
+    .legend i.w {
+      background: var(--b)
+    }
+
+    .tip3 {
+      position: absolute;
+      pointer-events: none;
+      transform: translate(-50%, -135%);
+      padding: 9px 13px;
+      border-radius: 12px;
+      background: var(--bg);
+      border: 1px solid var(--line);
+      font-size: 13px;
+      white-space: nowrap;
+      z-index: 2;
+      box-shadow: 0 14px 30px -10px var(--sh)
+    }
+
+    .tip3 b {
+      display: block;
+      font: 700 15px 'Bricolage Grotesque', sans-serif
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 99px;
+      font-size: 13px;
+      font-weight: 600;
+      background: color-mix(in srgb, var(--c) 22%, transparent);
+      color: var(--c)
+    }
+
+    section {
+      padding: 90px 0
+    }
+
+    .sub {
+      color: var(--mute);
+      max-width: 36em;
+      margin: 0 0 42px;
+      font-size: 18px
+    }
+
+    .grid {
+      display: grid;
+      gap: 18px;
+      perspective: 1000px
+    }
+
+    .g3 {
+      grid-template-columns: repeat(3, 1fr)
+    }
+
+    .g4 {
+      grid-template-columns: repeat(4, 1fr)
+    }
+
+    .card {
+      position: relative;
+      border-radius: 22px;
+      padding: 26px;
+      background: var(--glass);
+      border: 1px solid var(--line);
+      backdrop-filter: blur(10px);
+      transform-style: preserve-3d;
+      transition: transform .2s ease-out, border-color .3s;
+      overflow: hidden
+    }
+
+    .card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(260px circle at var(--mx, 50%) var(--my, 0%), color-mix(in srgb, var(--a) 30%, transparent), transparent 60%);
+      opacity: 0;
+      transition: opacity .3s;
+      pointer-events: none
+    }
+
+    .card:hover {
+      border-color: var(--a)
+    }
+
+    .card:hover::after {
+      opacity: 1
+    }
+
+    .card h3 {
+      font: 700 22px 'Bricolage Grotesque', sans-serif;
+      letter-spacing: -.02em;
+      margin: 0 0 8px;
+      transform: translateZ(40px)
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--mute);
+      transform: translateZ(20px)
+    }
+
+    .num {
+      font: 800 56px 'Bricolage Grotesque', sans-serif;
+      color: transparent;
+      -webkit-text-stroke: 1.5px var(--a);
+      display: block;
+      line-height: 1;
+      transform: translateZ(55px);
+      margin-bottom: 8px
+    }
+
+    .demo {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px
+    }
+
+    .pane {
+      border-radius: 24px;
+      border: 1px solid var(--line);
+      background: var(--glass);
+      backdrop-filter: blur(12px);
+      padding: 24px;
+      min-height: 450px
+    }
+
+    .pane h4 {
+      font: 700 18px 'Bricolage Grotesque', sans-serif;
+      margin: 0 0 16px;
+      display: flex;
+      justify-content: space-between
+    }
+
+    .st {
+      font: 500 14px 'Hanken Grotesk';
+      color: var(--mute)
+    }
+
+    .line {
+      display: flex;
+      gap: 12px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      margin-bottom: 6px;
+      font-size: 15px;
+      transition: .3s
+    }
+
+    .line b {
+      flex: 0 0 70px;
+      font-family: 'Bricolage Grotesque';
+      color: var(--c)
+    }
+
+    .line.hit {
+      background: color-mix(in srgb, var(--c) 14%, transparent)
+    }
+
+    .line.clash {
+      background: color-mix(in srgb, var(--b) 20%, transparent);
+      box-shadow: inset 3px 0 var(--b)
+    }
+
+    .item {
+      border-radius: 14px;
+      padding: 13px 16px;
+      margin-bottom: 9px;
+      border: 1px solid var(--line);
+      background: color-mix(in srgb, var(--ink) 5%, transparent);
+      animation: pop .5s cubic-bezier(.2, 1.4, .4, 1) both
+    }
+
+    @keyframes pop {
+      from {
+        opacity: 0;
+        transform: translateY(14px) rotateX(-30deg)
+      }
+    }
+
+    .item .m {
+      font-size: 14px;
+      color: var(--mute)
+    }
+
+    .conf {
+      border-radius: 16px;
+      padding: 16px;
+      margin: 12px 0;
+      background: color-mix(in srgb, var(--b) 16%, transparent);
+      border: 1px solid var(--b);
+      animation: pop .5s both
+    }
+
+    .conf p {
+      margin: 0 0 12px;
+      font-size: 15px
+    }
+
+    .conf button {
+      font: 600 14px 'Hanken Grotesk';
+      border-radius: 10px;
+      border: 1px solid var(--b);
+      background: transparent;
+      color: var(--b);
+      padding: 8px 14px;
+      margin: 0 8px 6px 0;
+      cursor: pointer
+    }
+
+    .conf button:hover {
+      background: var(--b);
+      color: var(--btnink)
+    }
+
+    .done {
+      background: color-mix(in srgb, var(--ok) 14%, transparent);
+      border-color: var(--ok)
+    }
+
+    .empty {
+      color: var(--mute);
+      text-align: center;
+      padding: 50px 10px
+    }
+
+    /* hold-to-approve gate */
+    .hold {
+      position: relative;
+      overflow: hidden;
+      user-select: none;
+      touch-action: none
+    }
+
+    .hold i {
+      position: absolute;
+      inset: 0;
+      background: rgba(255, 255, 255, .4);
+      transform-origin: left;
+      pointer-events: none
+    }
+
+    .hold span {
+      position: relative
+    }
+
+    .mem {
+      border-radius: 26px;
+      border: 1px solid var(--line);
+      background: var(--glass);
+      backdrop-filter: blur(12px);
+      padding: 20px;
+      position: relative
+    }
+
+    .mem svg {
+      width: 100%;
+      height: auto;
+      display: block
+    }
+
+    .mem text {
+      font-family: 'Hanken Grotesk';
+      fill: var(--mute);
+      font-size: 13px
+    }
+
+    .mem .nd {
+      cursor: pointer;
+      transition: transform .2s;
+      transform-box: fill-box;
+      transform-origin: center
+    }
+
+    .mem .nd:hover {
+      transform: scale(1.18)
+    }
+
+    .mem .cf {
+      stroke: var(--b);
+      stroke-width: 2;
+      stroke-dasharray: 6 6;
+      animation: dash 1s linear infinite;
+      fill: none
+    }
+
+    @keyframes dash {
+      to {
+        stroke-dashoffset: -12
+      }
+    }
+
+    .tip {
+      margin-top: 10px;
+      min-height: 48px;
+      color: var(--ink)
+    }
+
+    .tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 18px;
+      flex-wrap: wrap
+    }
+
+    .tabs button {
+      font: 600 15px 'Hanken Grotesk';
+      padding: 10px 18px;
+      border-radius: 99px;
+      border: 1px solid var(--line);
+      background: transparent;
+      color: var(--mute);
+      cursor: pointer
+    }
+
+    .tabs button[aria-selected=true] {
+      background: var(--ink);
+      color: var(--bg);
+      border-color: var(--ink)
+    }
+
+    .dock {
+      position: fixed;
+      right: 18px;
+      bottom: calc(18px + env(safe-area-inset-bottom, 0px));
+      display: flex;
+      gap: 8px;
+      padding: 9px 11px;
+      border-radius: 99px;
+      background: var(--glass);
+      border: 1px solid var(--line);
+      backdrop-filter: blur(14px);
+      z-index: 9;
+      box-shadow: 0 16px 40px -10px var(--sh)
+    }
+
+    .dock button {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: transform .2s
+    }
+
+    .dock button:hover {
+      transform: scale(1.25)
+    }
+
+    .dock button[aria-pressed=true] {
+      border-color: var(--ink)
+    }
+
+    footer {
+      padding: 50px 0 90px;
+      color: var(--mute);
+      border-top: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px
+    }
+
+    @media(max-width:900px) {
+
+      .hero,
+      .demo {
+        grid-template-columns: 1fr
+      }
+
+      .g3,
+      .g4 {
+        grid-template-columns: 1fr 1fr
+      }
+
+      .stage {
+        height: 480px
+      }
+
+      .navl {
+        display: none
+      }
+    }
+
+    @media(max-width:560px) {
+
+      .g3,
+      .g4 {
+        grid-template-columns: 1fr
+      }
+
+      .btn.g {
+        margin: 10px 0 0
+      }
+    }
+
+    @media(prefers-reduced-motion:reduce) {
+      * {
+        animation: none !important;
+        transition: none !important
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="bg" aria-hidden="true">
+    <div class="floor"></div><svg viewBox="0 0 1200 160" preserveAspectRatio="none">
+      <path d="M0 80H380l20-70 30 140 30-110 20 40h60l15-30 20 60 15-30H1200" />
+    </svg>
+  </div>
+  <div id="root"></div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/htm@3.1.1/dist/htm.umd.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script>
+    const { useState, useEffect, useRef, useCallback } = React;
+    const html = htm.bind(React.createElement);
+
+    /* Headline: every letter swells in weight + width as the cursor nears */
+    function Wave({ text, as = 'h1', grad = false }) {
+      const box = useRef(null);
+      const words = text.split(' ');
+      const move = e => {
+        box.current.querySelectorAll('span').forEach(s => {
+          const r = s.getBoundingClientRect(), d = Math.hypot(e.clientX - (r.left + r.width / 2), e.clientY - (r.top + r.height / 2)), k = Math.exp(-(d * d) / (2 * 110 * 110));
+          s.style.fontVariationSettings = `'wght' ${Math.round(700 + 100 * k)},'wdth' ${Math.round(100 - 10 * k)}`; s.style.transform = `translateY(${-6 * k}px)`
+        })
+      };
+      const leave = () => box.current.querySelectorAll('span').forEach(s => { s.style.fontVariationSettings = "'wght' 700,'wdth' 100"; s.style.transform = '' });
+      return html`<${as} ref=${box} className=${'wave' + (grad ? ' g' : '')} onMouseMove=${move} onMouseLeave=${leave} aria-label=${text}>
+    ${words.map((w, i) => html`<span className="w" key=${i} aria-hidden="true">${[...w].map((c, j) => html`<span key=${j}>${c}</span>`)}</span>`)}
+  <//>`;
+    }
+
+    /* 3D tilt card */
+    function Tilt({ children, className = '', style }) {
+      const r = useRef(null);
+      return html`<div ref=${r} className=${'card ' + className} style=${style}
+    onMouseMove=${e => { const b = r.current.getBoundingClientRect(), x = (e.clientX - b.left) / b.width, y = (e.clientY - b.top) / b.height; const s = r.current.style; s.transform = `rotateY(${(x - .5) * 16}deg) rotateX(${(.5 - y) * 16}deg) translateZ(14px)`; s.setProperty('--mx', x * 100 + '%'); s.setProperty('--my', y * 100 + '%') }}
+    onMouseLeave=${() => r.current.style.transform = ''}>${children}</div>`;
+    }
+
+    /* Hero: three physically-lit glossy decision tiles (PBR + soft shadows + studio reflections) */
+    const CARDS = [
+      { m: 'Nov 20 · Product sync', t: 'Payments: Stripe', b: 'Launch locked for Dec 5. Owner: Aarav.', g: 'Decision', k: '--c' },
+      { m: 'Nov 21 · Standup', t: '“Let’s use Razorpay”', b: 'Priya proposes a new gateway. Rohan moves launch to Dec 10.', g: 'New proposal', k: '--b' },
+      { m: 'Sankalp memory check', t: '2 conflicts found', b: 'Gateway and launch date differ from Nov 20. Waiting for your call.', g: 'Needs approval', k: '--b' }];
+    const POS = [[-.9, 1.25, -1.8], [0, 0, 0], [.9, -1.25, 1.8]];
+
+    function Scene3D() {
+      const box = useRef(null);
+      useEffect(() => {
+        const el = box.current, W = () => el.clientWidth || 400, H = () => el.clientHeight || 400;
+        const R = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        R.setPixelRatio(Math.min(devicePixelRatio, 2)); R.setSize(W(), H());
+        R.outputEncoding = THREE.sRGBEncoding; R.toneMapping = THREE.ACESFilmicToneMapping; R.toneMappingExposure = 1.05;
+        R.shadowMap.enabled = true; R.shadowMap.type = THREE.PCFSoftShadowMap; el.appendChild(R.domElement);
+        const S = new THREE.Scene(), C = new THREE.PerspectiveCamera(32, W() / H(), .1, 100); C.position.set(0, .8, 14.5); C.lookAt(0, -.2, 0);
+        const cs = getComputedStyle(document.documentElement), cv = n => new THREE.Color(cs.getPropertyValue(n).trim() || '#fff'), raw = n => cs.getPropertyValue(n).trim() || '#fff';
+        /* geometry: rounded, bevelled slab */
+        const w = 4.4, h = 2.2, r = .26, sh = new THREE.Shape();
+        sh.moveTo(-w / 2 + r, -h / 2); sh.lineTo(w / 2 - r, -h / 2); sh.quadraticCurveTo(w / 2, -h / 2, w / 2, -h / 2 + r); sh.lineTo(w / 2, h / 2 - r); sh.quadraticCurveTo(w / 2, h / 2, w / 2 - r, h / 2);
+        sh.lineTo(-w / 2 + r, h / 2); sh.quadraticCurveTo(-w / 2, h / 2, -w / 2, h / 2 - r); sh.lineTo(-w / 2, -h / 2 + r); sh.quadraticCurveTo(-w / 2, -h / 2, -w / 2 + r, -h / 2);
+        const geo = new THREE.ExtrudeGeometry(sh, { depth: .14, bevelEnabled: true, bevelThickness: .05, bevelSize: .05, bevelSegments: 6, curveSegments: 18 }); geo.center();
+        const body = new THREE.MeshPhysicalMaterial({ roughness: .38, metalness: .15, clearcoat: 1, clearcoatRoughness: .12, envMapIntensity: 1.1 });
+        const G = new THREE.Group(); S.add(G); const tiles = [], bodies = [];
+        CARDS.forEach((c, i) => {
+          const g = new THREE.Group(), m = new THREE.Mesh(geo, body); m.castShadow = m.receiveShadow = true; m.userData.i = i; g.add(m); bodies.push(m);
+          const tm = new THREE.MeshBasicMaterial({ transparent: true, toneMapped: false }), pl = new THREE.Mesh(new THREE.PlaneGeometry(w, h), tm); pl.position.z = .126; g.add(pl);
+          g.position.set(...POS[i]); g.userData = { base: POS[i][1], l: 0, tm }; G.add(g); tiles.push(g)
+        });
+        /* amber light strip + spill on the front tile */
+        const strip = new THREE.Mesh(new THREE.BoxGeometry(w - .9, .045, .02), new THREE.MeshBasicMaterial({ toneMapped: false })); strip.position.set(0, -h / 2 + .2, .13); tiles[2].add(strip);
+        const spill = new THREE.PointLight(0xffffff, .9, 7); spill.position.set(0, -.6, 1.2); tiles[2].add(spill);
+        /* lights + shadow-only floor */
+        const key = new THREE.DirectionalLight(0xffffff, 1.15); key.position.set(4, 9, 7); key.castShadow = true; key.shadow.mapSize.set(2048, 2048);
+        Object.assign(key.shadow.camera, { left: -9, right: 9, top: 9, bottom: -9, near: 1, far: 30 }); key.shadow.bias = -.0004; key.shadow.normalBias = .03; S.add(key);
+        const rim = new THREE.PointLight(0xffffff, 1.1, 22); rim.position.set(-6, 3, -5); S.add(rim); S.add(new THREE.AmbientLight(0xffffff, .25));
+        const floor = new THREE.Mesh(new THREE.PlaneGeometry(40, 40).rotateX(-Math.PI / 2), new THREE.ShadowMaterial({ opacity: .42 })); floor.position.y = -3.1; floor.receiveShadow = true; S.add(floor);
+        /* text textures */
+        const wrap = (x, t, mw) => { const L = []; let l = ''; t.split(' ').forEach(wd => { const n = l ? l + ' ' + wd : wd; if (x.measureText(n).width > mw && l) { L.push(l); l = wd } else l = n }); L.push(l); return L };
+        const draw = c => {
+          const cn = document.createElement('canvas'); cn.width = 1100; cn.height = 550; const x = cn.getContext('2d'), P = 72;
+          x.fillStyle = raw('--mute'); x.font = '600 30px "Hanken Grotesk",sans-serif'; x.fillText(c.m, P, 100);
+          x.fillStyle = raw('--ink'); x.font = '700 70px "Bricolage Grotesque","Trebuchet MS",sans-serif'; x.fillText(c.t, P, 195);
+          x.globalAlpha = .85; x.font = '400 33px "Hanken Grotesk",sans-serif'; wrap(x, c.b, 940).forEach((l, j) => x.fillText(l, P, 268 + j * 46)); x.globalAlpha = 1;
+          x.font = '600 28px "Hanken Grotesk",sans-serif'; const tw = x.measureText(c.g).width + 44, ty = 410;
+          x.fillStyle = raw(c.k); x.globalAlpha = .22; x.beginPath(); x.moveTo(P + 22, ty); x.arcTo(P + tw, ty, P + tw, ty + 50, 25); x.arcTo(P + tw, ty + 50, P, ty + 50, 25); x.arcTo(P, ty + 50, P, ty, 25); x.arcTo(P, ty, P + tw, ty, 25); x.fill();
+          x.globalAlpha = 1; x.fillText(c.g, P + 22, ty + 35);
+          const t = new THREE.CanvasTexture(cn); t.encoding = THREE.sRGBEncoding; t.anisotropy = R.capabilities.getMaxAnisotropy(); return t
+        };
+        /* studio reflections (softboxes in theme colours) */
+        const pm = new THREE.PMREMGenerator(R); let envT = null;
+        const env = () => {
+          const e = new THREE.Scene(); e.add(new THREE.Mesh(new THREE.BoxGeometry(30, 30, 30), new THREE.MeshBasicMaterial({ color: 0x090912, side: THREE.BackSide })));
+          const pn = (a, b, col, k, x, y, z) => { const m = new THREE.Mesh(new THREE.PlaneGeometry(a, b), new THREE.MeshBasicMaterial({ color: col.clone().multiplyScalar(k), side: THREE.DoubleSide })); m.position.set(x, y, z); m.lookAt(0, 0, 0); e.add(m) };
+          pn(14, 6, new THREE.Color(0xffffff), 5, 0, 12, 5); pn(3, 16, cv('--a'), 6, -13, 2, 3); pn(3, 16, cv('--c'), 5, 13, 2, -3); pn(10, 3, new THREE.Color(0xffffff), 2, 0, -1, 14);
+          if (envT) envT.dispose(); envT = pm.fromScene(e, .03).texture; S.environment = envT
+        };
+        const paint = () => {
+          const bg = cv('--bg'), light = bg.getHSL({}).l > .5, bc = cv('--bg2'); if (light) bc.lerp(new THREE.Color(0xffffff), .55); else bc.multiplyScalar(.8);
+          body.color.copy(bc); rim.color.copy(cv('--a')); spill.color.copy(cv('--b')); strip.material.color.copy(cv('--b'));
+          tiles.forEach((g, i) => { const o = g.userData.tm.map; if (o) o.dispose(); g.userData.tm.map = draw(CARDS[i]); g.userData.tm.needsUpdate = true }); env()
+        };
+        paint(); try { Promise.all([document.fonts.load('700 70px "Bricolage Grotesque"'), document.fonts.load('400 33px "Hanken Grotesk"'), document.fonts.load('600 30px "Hanken Grotesk"')]).then(paint) } catch (e) { }
+        const mo = new MutationObserver(() => setTimeout(paint, 30)); mo.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+        /* motion: gentle float, soft cursor parallax, lift on hover */
+        const still = matchMedia('(prefers-reduced-motion:reduce)').matches, cvs = R.domElement, ray = new THREE.Raycaster(), nd = new THREE.Vector2();
+        let mx = 0, my = 0, cx = 0, cy = 0, hov = -1, raf, t = 0;
+        const mv = e => {
+          const b = cvs.getBoundingClientRect(); nd.set(((e.clientX - b.left) / b.width) * 2 - 1, -((e.clientY - b.top) / b.height) * 2 + 1); mx = nd.x; my = nd.y;
+          ray.setFromCamera(nd, C); const hit = ray.intersectObjects(bodies)[0]; hov = hit ? hit.object.userData.i : -1
+        };
+        cvs.addEventListener('pointermove', mv); cvs.addEventListener('pointerleave', () => { mx = my = 0; hov = -1 });
+        const rs = () => { R.setSize(W(), H()); C.aspect = W() / H(); C.updateProjectionMatrix() }; addEventListener('resize', rs);
+        const loop = () => {
+          t += .016; cx += (mx - cx) * .05; cy += (my - cy) * .05;
+          G.rotation.y = -.5 + cx * .22; G.rotation.x = .07 - cy * .08;
+          tiles.forEach((g, i) => { const u = g.userData; u.l += ((hov === i ? .28 : 0) - u.l) * .1; g.position.y = u.base + u.l + (still ? 0 : Math.sin(t * .8 + i * 1.3) * .07) });
+          R.render(S, C); raf = requestAnimationFrame(loop)
+        }; loop();
+        return () => { cancelAnimationFrame(raf); mo.disconnect(); removeEventListener('resize', rs); pm.dispose(); R.dispose(); if (cvs.parentNode) cvs.parentNode.removeChild(cvs) };
+      }, []);
+      return html`<div className="stage" role="img" aria-label="Three glossy 3D cards for two meetings and a memory check that found two conflicts">
+    <div className="cv" ref=${box}></div>
+    <div className="legend"><span>Move your cursor over the cards</span></div>
+  </div>`;
+    }
+
+    function Hero() {
+      return html`<header className="hero">
+    <div>
+      <${Wave} text="Meetings end." grad=${false}/>
+      <${Wave} text="Decisions don’t." grad=${true}/>
+      <p className="lead">Sankalp turns every transcript into confirmed decisions, owned tasks and deadlines, and catches it the moment a new meeting contradicts an old one.</p>
+      <a href="#demo"><button className="btn">Try the live demo</button></a><a href="#memory"><button className="btn g">See the memory</button></a>
+    </div>
+    <${Scene3D}/>
+  </header>`;
+    }
+
+    const API_BASE = (typeof window !== 'undefined' && window.location.origin.includes(':8000'))
+      ? window.location.origin
+      : 'http://127.0.0.1:8000';
+
+    const LINES = [['a', 'Priya', 'Let’s switch to Razorpay for payments. Fees are better for India.'], ['b', 'Rohan', 'Then launch should move to Dec 10, not Dec 5.'], ['c', 'Aarav', 'I’ll update the checkout flow by Nov 28.'], ['d', 'Meera', 'I’ll send the QA checklist to everyone by Nov 25.']];
+
+    function Hold({ onDone, disabled }) {
+      const [p, setP] = useState(0), raf = useRef(0), t0 = useRef(0);
+      const go = () => { if (disabled) return; t0.current = performance.now(); const f = () => { const v = Math.min(1, (performance.now() - t0.current) / 1100); setP(v); if (v >= 1) { onDone(); return } raf.current = requestAnimationFrame(f) }; raf.current = requestAnimationFrame(f) };
+      const stop = () => { cancelAnimationFrame(raf.current); setP(0) };
+      return html`<button className="btn hold" disabled=${disabled} onPointerDown=${go} onPointerUp=${stop} onPointerLeave=${stop}
+    onKeyDown=${e => { if ((e.key === ' ' || e.key === 'Enter') && !e.repeat) { e.preventDefault(); go() } }} onKeyUp=${stop}>
+    <i style=${{ transform: `scaleX(${p})` }}></i><span>Hold to approve and push</span></button>`;
+    }
+
+    function Demo({ onApproved }) {
+      const [s, setS] = useState({ ext: false, choice: null, pushed: false, loading: false, backendData: null, pushResult: null });
+      const { ext, choice, pushed, loading, backendData, pushResult } = s;
+      const gw = choice === 'razor' ? 'Razorpay' : 'Stripe', ln = choice === 'razor' ? 'Dec 10' : 'Dec 5';
+      const cls = k => !ext ? '' : (choice && 'ab'.includes(k) ? 'hit' : (!choice && 'ab'.includes(k) ? 'clash' : ''));
+
+      const fmtDate = d => !d ? 'TBD' : (d === '2026-11-28' ? 'Nov 28' : (d === '2026-11-25' ? 'Nov 25' : (d === '2026-12-02' ? 'Dec 2' : (d === '2026-12-10' ? 'Dec 10' : d))));
+
+      const handleExtract = async () => {
+        setS(prev => ({ ...prev, loading: true }));
+        const transcriptText = LINES.map(l => `${l[1]}: ${l[2]}`).join('\n');
+        try {
+          const res = await fetch(`${API_BASE}/api/ingest`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              transcript: transcriptText,
+              meeting_title: "Today's standup",
+              meeting_date: "2026-11-21",
+              attendees: ["Priya", "Rohan", "Aarav", "Meera"]
+            })
+          });
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          const data = await res.json();
+          setS({
+            ext: true,
+            choice: null,
+            pushed: false,
+            loading: false,
+            backendData: data,
+            pushResult: null
+          });
+        } catch (err) {
+          console.warn('Backend unavailable, using fallback demo data:', err);
+          setS({
+            ext: true,
+            choice: null,
+            pushed: false,
+            loading: false,
+            backendData: null,
+            pushResult: null
+          });
+        }
+      };
+
+      const handleApprove = async () => {
+        const isRazor = choice === 'razor';
+        const sessionId = backendData?.session_id || ('demo_' + Date.now());
+
+        // Extract or fallback items
+        const bDecisions = backendData?.staged_items?.decisions || [];
+        const bTasks = backendData?.staged_items?.tasks || [];
+
+        const approvedDecisions = bDecisions.length > 0 ? bDecisions.map(d => {
+          let val = d.value;
+          let resStrategy = 'none';
+          if (d.topic.toLowerCase().includes('payment') || d.topic.toLowerCase().includes('gateway')) {
+            val = isRazor ? 'Razorpay' : 'Stripe';
+            resStrategy = isRazor ? 'supersede' : 'keep_old';
+          } else if (d.topic.toLowerCase().includes('launch') || d.topic.toLowerCase().includes('date')) {
+            val = isRazor ? '2026-12-10' : '2026-12-05';
+            resStrategy = isRazor ? 'supersede' : 'keep_old';
+          }
+          return {
+            id: d.id,
+            topic: d.topic,
+            value: val,
+            category: d.category || 'General',
+            speaker: d.speaker,
+            reason: d.reason || (isRazor ? 'Switched to Razorpay for India fees' : 'Retained Stripe'),
+            conflict_resolution: resStrategy,
+            conflicting_decision_id: d.conflicts_with || null,
+            approved: true
+          };
+        }) : [
+          {
+            id: 'dec_gateway_' + Date.now(),
+            topic: 'Payments API',
+            value: isRazor ? 'Razorpay' : 'Stripe',
+            category: 'Payments',
+            speaker: 'Priya',
+            reason: isRazor ? 'Switched to Razorpay for India fees' : 'Retained Stripe',
+            conflict_resolution: isRazor ? 'supersede' : 'keep_old',
+            approved: true
+          },
+          {
+            id: 'dec_launch_' + Date.now(),
+            topic: 'v1 Launch Date',
+            value: isRazor ? '2026-12-10' : '2026-12-05',
+            category: 'Timeline',
+            speaker: 'Rohan',
+            reason: isRazor ? 'Move launch to Dec 10' : 'Retained Dec 5 launch',
+            conflict_resolution: isRazor ? 'supersede' : 'keep_old',
+            approved: true
+          }
+        ];
+
+        const approvedTasks = bTasks.length > 0 ? bTasks.map(t => ({
+          id: t.id,
+          title: t.title,
+          owner: t.owner,
+          due_date: t.due_date,
+          priority: t.priority || 'medium',
+          flag_amber: Boolean(t.flag_amber),
+          approved: true
+        })) : [
+          { id: 'task_aarav_' + Date.now(), title: 'Update checkout flow', owner: 'Aarav', due_date: '2026-11-28', priority: 'high', flag_amber: false, approved: true },
+          { id: 'task_meera_' + Date.now(), title: 'Send QA checklist', owner: 'Meera', due_date: '2026-11-25', priority: 'medium', flag_amber: false, approved: true }
+        ];
+
+        const approvePayload = {
+          session_id: sessionId,
+          meeting_title: "Today's standup",
+          meeting_date: "2026-11-21",
+          approved_decisions: approvedDecisions,
+          approved_tasks: approvedTasks,
+          push_to_github: false,
+          notify_webhook: false
+        };
+
+        try {
+          const res = await fetch(`${API_BASE}/api/approve`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(approvePayload)
+          });
+          const resData = await res.json();
+
+          // Refresh tasks, reminders, and digests from backend
+          await Promise.allSettled([
+            fetch(`${API_BASE}/api/tasks`),
+            fetch(`${API_BASE}/api/reminders`),
+            fetch(`${API_BASE}/api/digest/Aarav`),
+            fetch(`${API_BASE}/api/digest/Priya`),
+            fetch(`${API_BASE}/api/digest/Rohan`),
+            fetch(`${API_BASE}/api/digest/Meera`),
+            fetch(`${API_BASE}/api/memory?status=all`)
+          ]);
+
+          setS(x => ({ ...x, pushed: true, pushResult: resData }));
+          if (onApproved) onApproved();
+        } catch (err) {
+          console.warn('Backend approve call failed, falling back to local state:', err);
+          setS(x => ({ ...x, pushed: true }));
+          if (onApproved) onApproved();
+        }
+      };
+
+      const hasBackendItems = backendData && backendData.staged_items;
+      const bDecs = hasBackendItems ? (backendData.staged_items.decisions || []) : [];
+      const bTasks = hasBackendItems ? (backendData.staged_items.tasks || []) : [];
+
+      return html`<section id="demo"><${Wave} text="Run it on a real meeting." as="h2"/>
+  <p className="sub">Extract the items, resolve the conflict, then hold the button to approve. Nothing reaches the tracker before that.</p>
+  <div className="demo">
+    <div className="pane"><h4>Today’s standup <span className="st">Nov 21</span></h4>
+      ${LINES.map(l => html`<div key=${l[0]} className=${'line ' + cls(l[0])}><b>${l[1]}</b><span>${l[2]}</span></div>`)}
+      <div style=${{ marginTop: 16 }}>
+        <button className="btn" disabled=${loading} onClick=${handleExtract}>${loading ? 'Extracting via backend...' : 'Extract from transcript'}</button>
+        <button className="btn g" onClick=${() => setS({ ext: false, choice: null, pushed: false, loading: false, backendData: null, pushResult: null })}>Reset</button>
+      </div>
+    </div>
+    <div className="pane"><h4>Review and approve <span className="st">${!ext ? 'Nothing extracted yet' : loading ? 'Extracting...' : pushed ? 'Approved' : choice ? 'Conflict resolved' : (hasBackendItems ? `${bDecs.length + bTasks.length} items · ${backendData.staged_items.conflicts?.length || 1} conflict` : '4 items · 1 conflict')}</span></h4>
+      ${!ext ? html`<div className="empty">Extracted decisions and tasks will appear here for review.</div>` : html`<div>
+        ${hasBackendItems ? html`<div>
+          ${bDecs.map(d => {
+            const isGw = d.topic.toLowerCase().includes('payment') || d.topic.toLowerCase().includes('gateway');
+            const isLn = d.topic.toLowerCase().includes('launch') || d.topic.toLowerCase().includes('date');
+            const displayTopic = isGw ? 'Gateway' : (isLn ? 'Launch' : d.topic);
+            const displayVal = choice ? (isGw ? gw : (isLn ? ln : d.value)) : (d.status === 'conflicting' ? 'pending' : d.value);
+            return html`<div key=${d.id} className="item"><b>Decision · ${displayTopic}: ${displayVal}</b><div className="m">Proposed by ${d.speaker || 'Team'}</div></div>`;
+          })}
+          ${bTasks.map(t => html`
+            <div key=${t.id} className="item"><b>Action · ${t.title}</b><div className="m">Owner: ${t.owner || 'Unassigned'} · Due ${fmtDate(t.due_date)}</div></div>
+          `)}
+        </div>` : html`<div>
+          <div className="item"><b>Decision · Gateway: ${choice ? gw : 'pending'}</b><div className="m">Proposed by Priya</div></div>
+          <div className="item"><b>Decision · Launch: ${choice ? ln : 'pending'}</b><div className="m">Proposed by Rohan</div></div>
+          <div className="item"><b>Action · Update checkout flow</b><div className="m">Owner: Aarav · Due Nov 28</div></div>
+          <div className="item"><b>Action · Send QA checklist</b><div className="m">Owner: Meera · Due Nov 25</div></div>
+        </div>`}
+        ${!choice && html`<div className="conf"><p><b>Conflict with Nov 20 product sync.</b> That meeting decided Stripe and a Dec 5 launch. Which stands?</p>
+          <button onClick=${() => setS({ ...s, choice: 'stripe' })}>Keep Stripe, Dec 5</button><button onClick=${() => setS({ ...s, choice: 'razor' })}>Switch to Razorpay, Dec 10</button></div>`}
+        ${pushed ? html`<div className="conf done"><p><b>Pushed to tracker.</b> ${pushResult ? `${pushResult.tasks_created} tasks created in Kanban. Reminders set for Nov 24 and Nov 27. ${pushResult.decisions_committed} decisions saved to memory (${pushResult.decisions_superseded} superseded).` : '2 tasks created. Reminders set for Nov 24 and Nov 27. Decisions saved to memory.'}</p></div>`
+            : html`<div style=${{ marginTop: 14 }}><${Hold} disabled=${!choice} onDone=${handleApprove}/> <span className="st">${choice ? 'Press and hold for one second' : 'Resolve the conflict first'}</span></div>`}
+      </div>`}
+    </div></div></section>`;
+    }
+
+    const NODES = [
+      { id: 'k', x: 90, y: 70, m: 'Nov 18 · Kickoff', t: 'Target: launch before December', who: 'Meera' },
+      { id: 's', x: 360, y: 70, m: 'Nov 20 · Product sync', t: 'Gateway: Stripe', who: 'Aarav' },
+      { id: 'd5', x: 360, y: 170, m: 'Nov 20 · Product sync', t: 'Launch: Dec 5', who: 'Rohan' },
+      { id: 'r', x: 640, y: 70, m: 'Nov 21 · Standup', t: 'Proposal: Razorpay', who: 'Priya', c: 1 },
+      { id: 'd10', x: 640, y: 170, m: 'Nov 21 · Standup', t: 'Proposal: Dec 10', who: 'Rohan', c: 1 },
+      { id: 'q', x: 640, y: 260, m: 'Nov 21 · Standup', t: 'Action: QA checklist by Nov 25', who: 'Meera' }];
+    const LINKS = [['k', 's'], ['k', 'd5'], ['s', 'r', 1], ['d5', 'd10', 1]];
+
+    function Memory({ refreshVer }) {
+      const [h, setH] = useState(null), [nodes, setNodes] = useState(NODES), [links, setLinks] = useState(LINKS);
+
+      useEffect(() => {
+        fetch(`${API_BASE}/api/memory?status=all`)
+          .then(r => r.ok ? r.json() : null)
+          .then(data => {
+            if (data && data.length > 0) {
+              const isRazorActive = data.some(d => d.value?.toLowerCase() === 'razorpay' && d.status === 'active');
+              if (isRazorActive) {
+                setNodes(prev => prev.map(n => {
+                  if (n.id === 'r') return { ...n, c: 0, t: 'Proposal: Razorpay (Approved Active)' };
+                  if (n.id === 'd10') return { ...n, c: 0, t: 'Proposal: Dec 10 (Approved Active)' };
+                  if (n.id === 's') return { ...n, t: 'Gateway: Stripe (Superseded)' };
+                  if (n.id === 'd5') return { ...n, t: 'Launch: Dec 5 (Superseded)' };
+                  return n;
+                }));
+                setLinks([['k', 's'], ['k', 'd5'], ['s', 'r', 0], ['d5', 'd10', 0]]);
+              }
+            }
+          })
+          .catch(() => {});
+      }, [refreshVer]);
+
+      const N = Object.fromEntries(nodes.map(n => [n.id, n]));
+      const n = h && N[h];
+
+      return html`<section id="memory"><${Wave} text="Memory across every meeting." as="h2"/>
+  <p className="sub">Each decision becomes a node. When a new one touches an old one, the link turns amber. Hover a node to see where it came from.</p>
+  <div className="mem"><svg viewBox="0 0 740 310" role="img" aria-label="Decision memory graph across three meetings">
+    ${['Nov 18', 'Nov 20', 'Nov 21'].map((d, i) => html`<text key=${d} x=${90 + i * 275 - (i ? 0 : 0)} y="22" textAnchor="middle" style=${{ textAnchor: 'middle' }}>${d}</text>`)}
+    ${links.map((l, i) => html`<path key=${i} className=${l[2] ? 'cf' : ''} d=${`M${N[l[0]].x} ${N[l[0]].y} C ${(N[l[0]].x + N[l[1]].x) / 2} ${N[l[0]].y}, ${(N[l[0]].x + N[l[1]].x) / 2} ${N[l[1]].y}, ${N[l[1]].x} ${N[l[1]].y}`} style=${l[2] ? {} : { stroke: 'var(--line)', strokeWidth: 2, fill: 'none' }}/>`)}
+    ${nodes.map(o => html`<g key=${o.id} className="nd" tabIndex="0" onMouseEnter=${() => setH(o.id)} onFocus=${() => setH(o.id)} onMouseLeave=${() => setH(null)}>
+      <circle cx=${o.x} cy=${o.y} r="22" fill=${o.c ? 'var(--b)' : 'var(--c)'} opacity=".22"/>
+      <circle cx=${o.x} cy=${o.y} r="11" fill=${o.c ? 'var(--b)' : 'var(--c)'} stroke="var(--ink)" strokeWidth=${h === o.id ? 3 : 0}/></g>`)}
+  </svg><div className="tip">${n ? html`<b>${n.t}</b> <span className="st">· ${n.m} · said by ${n.who}</span>` : html`<span className="st">Hover a node. Amber dashed links are conflicts waiting for a decision.</span>`}</div></div></section>`;
+    }
+
+    const D = { Aarav: ['Update checkout flow, due Nov 28 (reminder Nov 27)', 'Confirm gateway keys once the decision is approved'], Priya: ['Razorpay proposal is awaiting approval', 'Review the fee comparison before Friday'], Rohan: ['Dec 10 launch proposal conflicts with Dec 5', 'Share the revised launch plan with sales'], Meera: ['Send QA checklist, due Nov 25 (reminder Nov 24)', 'Book test devices for the regression run'] };
+
+    function Digest({ refreshVer }) {
+      const [n, setN] = useState('Aarav');
+      const [liveDigest, setLiveDigest] = useState({});
+
+      useEffect(() => {
+        fetch(`${API_BASE}/api/digest/${encodeURIComponent(n)}`)
+          .then(r => r.ok ? r.json() : null)
+          .then(data => {
+            if (data) {
+              const list = [];
+              if (data.active_tasks && data.active_tasks.length > 0) {
+                data.active_tasks.forEach(t => {
+                  list.push(`${t.title}${t.due_date ? ', due ' + t.due_date : ''} (Kanban: ${t.status})`);
+                });
+              }
+              if (data.upcoming_deadlines && data.upcoming_deadlines.length > 0) {
+                data.upcoming_deadlines.forEach(u => {
+                  list.push(`Upcoming deadline: ${u.title} (${u.time_remaining})`);
+                });
+              }
+              if (data.decisions_owned && data.decisions_owned.length > 0) {
+                data.decisions_owned.forEach(d => {
+                  list.push(`Decision: ${d.topic} -> ${d.value} (${d.status})`);
+                });
+              }
+              if (list.length > 0) {
+                setLiveDigest(prev => ({ ...prev, [n]: list }));
+              }
+            }
+          })
+          .catch(() => {});
+      }, [n, refreshVer]);
+
+      const items = liveDigest[n] || D[n] || [];
+
+      return html`<section id="digest"><${Wave} text="One weekly recap per person." as="h2"/>
+  <p className="sub">Pick a teammate to see the digest they’d get on Monday.</p>
+  <div className="tabs" role="tablist">${Object.keys(D).map(k => html`<button key=${k} role="tab" aria-selected=${k === n} onClick=${() => setN(k)}>${k}</button>`)}</div>
+  <div style=${{ maxWidth: 640, perspective: 900 }}><${Tilt}><h3>${n}’s week</h3><ul style=${{ margin: '10px 0 0', paddingLeft: 20 }}>${items.map(x => html`<li key=${x} style=${{ marginBottom: 6 }}>${x}</li>`)}</ul><//></div></section>`;
+    }
+
+    /* Logo: a meeting pulse that resolves into a tick */
+    function Logo() { return html`<svg className="lg" viewBox="0 0 36 36" aria-hidden="true"><defs><linearGradient id="lgG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="var(--a)"/><stop offset="1" stopColor="var(--c)"/></linearGradient></defs><rect width="36" height="36" rx="11" fill="url(#lgG)"/><path d="M6 19H11L14 11L18 25L21 18L24 22L30 12" fill="none" stroke="var(--btnink)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/></svg>` }
+
+    const PV = {
+      problem: { t: 'The problem', d: 'Decisions get lost the moment the call ends.', v: () => html`<div>${[['Owners and deadlines scatter across notes and chat', '--b'], ['A changed decision silently contradicts the old one', '--a'], ['AI-made tasks need a human yes', '--c']].map(x => html`<div key=${x[0]} className="pvr"><i style=${{ background: 'var(' + x[1] + ')' }}></i>${x[0]}</div>`)}</div>` },
+      flow: { t: 'Seven moves', d: 'From transcript to tracker, with a human gate in the middle.', v: () => html`<div className="chips">${['Transcript', 'Extraction', 'Conflicts', 'Gate', 'Tracker', 'Reminders', 'Digest'].map((x, i) => html`<span key=${x} className=${i === 3 ? 'k' : ''}>${i + 1}. ${x}</span>`)}</div>` },
+      demo: { t: 'Live demo', d: 'Extract, resolve the conflict, then hold to approve.', v: () => html`<div className="mini"><div style=${{ color: 'var(--mute)' }}>Priya: let’s switch to Razorpay.</div><div className="pvr" style=${{ marginTop: 8 }}><i style=${{ background: 'var(--b)' }}></i>Gateway: Stripe vs Razorpay <b style=${{ color: 'var(--b)', marginLeft: 'auto' }}>Conflict</b></div><div className="bar"><span>Hold to approve</span></div></div>` },
+      memory: { t: 'Decision memory', d: 'Every decision linked across meetings. Conflicts glow amber.', v: () => html`<svg viewBox="0 0 360 110" style=${{ width: '100%' }}>${[20, 55, 90].map(y => html`<line key=${y} x1="10" x2="350" y1=${y} y2=${y} stroke="var(--line)" strokeWidth="2"/>`)}<path className="cf" d="M90 55 C130 55 130 90 170 90"/><path d="M90 20 L90 55" stroke="var(--mute)" strokeWidth="1.5"/>${[[90, 20, '--c'], [90, 55, '--c'], [170, 90, '--b'], [250, 55, '--c'], [300, 90, '--b']].map((n, i) => html`<circle key=${i} cx=${n[0]} cy=${n[1]} r="7" fill=${'var(' + n[2] + ')'}/>`)}</svg>` },
+      digest: { t: 'Weekly digest', d: 'One personal recap per teammate, every Monday.', v: () => html`<div className="av">${[['A', 80], ['P', 45], ['R', 60], ['M', 70]].map(x => html`<div key=${x[0]}><b>${x[0]}</b>tasks<u style=${{ '--w': x[1] + '%' }}></u></div>`)}</div>` }
+    };
+    const NAV = [['problem', 'Problem'], ['flow', 'How it works'], ['demo', 'Demo'], ['memory', 'Memory'], ['digest', 'Digest']];
+    function Nav() {
+      const nav = useRef(null), box = useRef(null), [o, setO] = useState(null);
+      const open = (k, e) => {
+        const a = e.currentTarget, nb = nav.current.getBoundingClientRect(), ab = a.getBoundingClientRect(), bb = box.current.getBoundingClientRect();
+        setO({ k, pl: ab.left - bb.left, pw: ab.width, pn: Math.max(0, Math.min(ab.left + ab.width / 2 - nb.left - 200, nb.width - Math.min(400, innerWidth - 48))) })
+      };
+      const P = o && PV[o.k];
+      return html`<div className="nav" ref=${nav} onMouseLeave=${() => setO(null)} onKeyDown=${e => e.key === 'Escape' && setO(null)}>
+    <div className="logo"><${Logo}/>Sankalp</div>
+    <div className="navl" ref=${box}>
+      <span className="pill" style=${o ? { left: o.pl, width: o.pw } : { opacity: 0 }}></span>
+      ${NAV.map(n => html`<a key=${n[0]} href=${'#' + n[0]} className=${o && o.k === n[0] ? 'on' : ''} onMouseEnter=${e => open(n[0], e)} onFocus=${e => open(n[0], e)}>${n[1]}</a>`)}
+    </div>
+    <a href="#demo"><button className="btn sm">Try the demo</button></a>
+    ${P && html`<div className="pvp" key=${o.k} style=${{ left: o.pn }}><h5>${P.t}</h5><p>${P.d}</p>${P.v()}</div>`}
+  </div>`;
+    }
+
+    const FLOW = [['Transcript and speakers', 'Reads the conversation and knows who said what.'], ['Extraction', 'Pulls out decisions, action items, owners and deadlines.'], ['Memory and conflicts', 'Compares with past meetings and flags clashes like Stripe vs Razorpay.'], ['Confirmation gate', 'Everything waits in review until a human approves.'], ['Tracker push', 'Approved action items become tracker tasks.'], ['Pre-deadline reminders', 'Owners get a nudge before the date, not after.'], ['Weekly digest', 'Each person gets duties, deadlines and updates.']];
+    const THEMES = [['nightfall', '#8b6cff'], ['aurora', '#2ee6a6'], ['ember', '#ff6a3d']];
+
+    function App() {
+      const [th, setTh] = useState(() => { try { return (['nightfall', 'aurora', 'ember'].includes(localStorage.getItem('ep-theme')) ? localStorage.getItem('ep-theme') : 'nightfall') } catch (e) { return 'nightfall' } });
+      useEffect(() => { document.documentElement.dataset.theme = th; try { localStorage.setItem('ep-theme', th) } catch (e) { } }, [th]);
+      const [refreshVer, setRefreshVer] = useState(0);
+      return html`<div className="wrap">
+    <${Nav}/>
+    <${Hero}/>
+    <section id="problem"><${Wave} text="Decisions made in meetings get lost." as="h2"/>
+      <p className="sub">Notes get buried, chats scroll away, and nobody remembers who agreed to what. A summary alone doesn’t fix that.</p>
+      <div className="grid g3"><${Tilt}><h3>Scattered follow-ups</h3><p>Who decided what, who owns which task and by when, spread across notes, chat and memory.</p><//>
+      <${Tilt}><h3>Silent contradictions</h3><p>A decision changes in a later meeting, but nothing tells the team the earlier one existed.</p><//>
+      <${Tilt}><h3>AI needs a human gate</h3><p>A wrong task or deadline must never reach the tracker without someone saying yes.</p><//></div></section>
+    <section id="flow"><${Wave} text="Seven moves from talk to action." as="h2"/>
+      <p className="sub">Hover any card. Each step hands over to the next, and nothing leaves staging until you approve.</p>
+      <div className="grid g4">${FLOW.map((f, i) => html`<${Tilt} key=${i}><span className="num">${i + 1}</span><h3>${f[0]}</h3><p>${f[1]}</p><//>`)}
+        <${Tilt} style=${{ background: 'linear-gradient(135deg,var(--a),var(--c))', color: 'var(--btnink)' }}><h3 style=${{ fontSize: 30, marginTop: 24 }}>Zero lost decisions.</h3><//></div></section>
+    <${Demo} onApproved=${() => setRefreshVer(v => v + 1)}/>
+    <${Memory} refreshVer=${refreshVer}/>
+    <${Digest} refreshVer=${refreshVer}/>
+    <footer><div className="logo"><${Logo}/>Sankalp</div><div>Review first. Push second. Remember always.</div></footer>
+    <div className="dock" role="group" aria-label="Theme">${THEMES.map(t => html`<button key=${t[0]} aria-label=${t[0] + ' theme'} aria-pressed=${th === t[0]} style=${{ background: t[1] }} onClick=${() => setTh(t[0])}></button>`)}</div>
+  </div>`;
+    }
+    ReactDOM.createRoot(document.getElementById('root')).render(html`<${App}/>`);
+  </script>
+</body>
+
+</html>
