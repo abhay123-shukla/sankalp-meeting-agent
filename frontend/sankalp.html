@@ -1380,9 +1380,9 @@
   </header>`;
     }
 
-    const API_BASE = (typeof window !== 'undefined' && window.location.origin.includes(':8000'))
+    const API_BASE = (typeof window !== 'undefined' && window.location.origin && !window.location.origin.startsWith('file:'))
       ? window.location.origin
-      : 'http://127.0.0.1:8000';
+      : '';
 
     const LINES = [
       ['a', 'Priya', 'Let’s switch to Razorpay for payments. Fees are better for India.'],
